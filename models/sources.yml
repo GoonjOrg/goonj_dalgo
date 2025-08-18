@@ -1,9 +1,85 @@
 version: 2
 
 sources:
-  - name: <source_name>
-    schema: <schema_name>
+  - name: staging_salesforce
+    schema: staging_salesforce
     tables:
-      - name: <table_name>
-        identifier: <table_name_in_db>
+      - name: demand_validation
+        identifier: Demand_Validation__c
+        description: <table_description>
+      
+      - name: kit
+        identifier: Kit__c
+        description: <table_description>
+      
+      - name: material_inventory
+        identifier: Material_Inventory__c
+        description: <table_description>
+      
+      - name: kit_line_item
+        identifier: Kit_Line_Item__c
+        description: <table_description>
+      
+      - name: implementation_inventory
+        identifier: Implementation_Inventory__c
+        description: <table_description>
+      
+      - name: dispatch_line_items
+        identifier: Dispatch_Line_Items__c
+        description: <table_description>
+      
+      - name: dispatch_status
+        identifier: Dispatch_Status__c
+        description: <table_description>
+      
+      - name: distribution_line
+        identifier: Distribution_Line__c
+        description: <table_description>
+      
+      - name: dispatch_received_status_line_item
+        identifier: Dispatch_Received_Status_Line_Item__c
+        description: <table_description>
+      
+      - name: dispatch_address
+        identifier: Dispatch_Address__c
+        description: <table_description>
+      
+      - name: distribution_Line
+        identifier: Distribution_Line__c
+        description: <table_description>
+      
+      - name: demand_post_validation
+        identifier: Demand_Post_Validation__c
+        description: <table_description>
+      
+      - name: demand_assignment
+        identifier: Demand_Assignment__c
+        description: <table_description>
+      
+      - name: relief_requirement_line_items
+        identifier: Relief_Requirement_line_items__c
+        description: <table_description>
+      
+      - name: activity
+        identifier: Activity__c
+        description: <table_description>
+      
+      - name: account
+        identifier: Account
+        description: <table_description>
+      
+      - name: distribution_activities
+        identifier: Distribution_Activities__c
+        description: <table_description>
+      
+      - name: distribution
+        identifier: Distribution__c
+        description: <table_description>
+      
+      - name: material_received_status
+        identifier: Material_Received_Status__c
+        description: <table_description>
+      
+      - name: relief_requirement
+        identifier: Relief_Requirement__c
         description: <table_description>
