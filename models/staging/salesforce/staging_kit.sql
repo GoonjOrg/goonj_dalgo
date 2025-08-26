@@ -4,7 +4,7 @@
 ) }}
 
 SELECT
-    "Id",
+    "Id" as kit_id,
     "Name",
     "OwnerId",
     "Type__c" AS type,
