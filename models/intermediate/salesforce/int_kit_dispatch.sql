@@ -37,6 +37,10 @@ SELECT
     ds.dispatch_state,
     ds.dispatch_district,
     ds.dispatch_country,
+    -- having duplicate of the same columns for cross-filtering purposes
+    ds.dispatch_state as state,
+    ds.dispatch_district as district,
+    ds.dispatch_country as country,
     ds.dispatch_pincode,
     ds.dispatch_street,
     ds.goonj_office,
