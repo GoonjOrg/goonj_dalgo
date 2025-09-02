@@ -6,17 +6,8 @@ WHAT THIS DOES: This script extracts raw activity data from Salesforce with mini
 - Organizes data by creation date for logical processing
 - Sets up the foundation for all intermediate and production models
 
-WHAT WE DO HERE:
-- Get all the raw activity data from Salesforce
-- Make minimal changes to keep data safe
-- Organize it in a way that's easy to work with
-- Set up the foundation for all other reports
 
-WHO NEEDS THIS:
-- This is the starting point for all other data work
-- Data engineers use this to build other reports
-- Quality teams check this to ensure data is good
-- Business users can see the raw data if needed
+
 */
 {{ config(
     materialized='table',

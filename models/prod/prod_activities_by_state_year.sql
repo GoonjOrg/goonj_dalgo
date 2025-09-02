@@ -8,11 +8,17 @@ SELECT
     state,
     EXTRACT(YEAR FROM activity_start_date) AS activity_year,
     
-    -- Partner classification logic
+    -- Enhanced partner classification logic using account data
     CASE 
-        WHEN LOWER(account_name) LIKE '%goonj%' OR account_name IS NULL OR account_name = '' THEN 'Self'
+        WHEN account_id IS NULL OR account_name IS NULL OR account_name = '' OR account_name = 'Goonj' OR LOWER(account_name) LIKE '%goonj%' OR LOWER(account_name_from_account_table) LIKE '%goonj%' THEN 'Self'
         ELSE 'Partner'
     END AS organization_type,
+    
+    -- Account information
+    COUNT(DISTINCT account_id) AS unique_accounts,
+    COUNT(DISTINCT account_type) AS unique_account_types,
+    COUNT(DISTINCT industry) AS unique_industries,
+    STRING_AGG(DISTINCT account_name, ', ') AS account_names,
     
     -- Activity metrics
     SUM(no_of_activities) AS total_activities,
@@ -59,7 +65,7 @@ GROUP BY
     state,
     EXTRACT(YEAR FROM activity_start_date),
     CASE 
-        WHEN LOWER(account_name) LIKE '%goonj%' OR account_name IS NULL OR account_name = '' THEN 'Self'
+        WHEN account_id IS NULL OR account_name IS NULL OR account_name = '' OR account_name = 'Goonj' OR LOWER(account_name) LIKE '%goonj%' OR LOWER(account_name_from_account_table) LIKE '%goonj%' THEN 'Self'
         ELSE 'Partner'
     END
 
