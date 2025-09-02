@@ -27,12 +27,10 @@
             {% endif %}
 
         {% elif 'prod' in node.fqn and node.fqn.index('prod') + 1 < node.fqn | length %}
-            {# Get the subfolder after 'prod' #}
-            {% set subfolder = node.fqn[node.fqn.index('prod') + 1] %}
             {% if target_name == 'prod' %}
-                prod_{{ subfolder | trim }}
+                prod
             {% else %}
-                dev_{{ subfolder | trim }}
+                dev
             {% endif %}
 
         {# Fallback to default schema if no specific case matches #}
