@@ -34,3 +34,13 @@ SELECT
     "Store_Item_Category__c" AS store_item_category,
     "Cooked_food_No_of_meals__c" AS cooked_food_no_of_meals
 FROM {{ source('staging_salesforce', 'dispatch_line_items') }}
+
+WHERE
+    -- Don't include deleted records
+    "IsDeleted" = FALSE
+    
+    -- Make sure we have the basic information we need
+    AND "Id" IS NOT NULL
+    AND "CreatedDate" IS NOT NULL
+
+ORDER BY "CreatedDate" DESC, "Id"

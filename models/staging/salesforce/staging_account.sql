@@ -49,12 +49,12 @@ SELECT
     "Description" AS description,
     "Rating" AS rating,
 
-    -- Custom fields (common in Salesforce)
-    "Account_Status__c" AS account_status,
-    "Organization_Type__c" AS organization_type,
-    "Registration_Number__c" AS registration_number,
-    "PAN_Number__c" AS pan_number,
-    "GST_Number__c" AS gst_number,
+    -- Custom fields (common in Salesforce) - commented out if not available
+    -- "Account_Status__c" AS account_status,
+    -- "Organization_Type__c" AS organization_type,
+    -- "Registration_Number__c" AS registration_number,
+    -- "PAN_Number__c" AS pan_number,
+    -- "GST_Number__c" AS gst_number,
 
     -- System integration information
     "_airbyte_raw_id" AS airbyte_raw_id

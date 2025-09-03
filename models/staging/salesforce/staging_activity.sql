@@ -36,7 +36,7 @@ SELECT
     "State__c" AS state,                     -- Which state (like Maharashtra, Bihar)
     "District__c" AS district,               -- Which district within the state
     -- "Village__c" AS village,                 -- Which village or locality (column not available)
-    "Tola_Mohalla__c",                       -- Neighborhood or community level
+    "Tola_Mohalla__c" AS tola_mohalla,       -- Neighborhood or community level
     "Other__c" AS other,                     -- Other location details
 
     -- Activity classification (what type of activity)
