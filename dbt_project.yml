@@ -54,13 +54,13 @@ models:
         +materialized: table
         +schema: "intermediate_salesforce"
         
-    # Analysis models - final insights and reporting (commented out as no analysis models exist)
-    # analysis:
-    #   +materialized: table
-    #   +schema: "analysis"
-    #   salesforce:
-    #     +materialized: table
-    #     +schema: "analysis_salesforce"
+    # Analysis models - final insights and reporting
+    analysis:
+      +materialized: table
+      +schema: "analysis"
+      salesforce:
+        +materialized: table
+        +schema: "analysis_salesforce"
         
     # Production models - final output
     prod:
