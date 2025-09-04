@@ -24,7 +24,7 @@ SELECT
     a."Measurement_Type__c" AS measurement_type,
     
     -- Account information
-    a.account_name,
+    a.account_name AS activity_account_name,
     acc.account_id,
     acc.account_name AS account_name_from_account_table,
     acc.account_type,
