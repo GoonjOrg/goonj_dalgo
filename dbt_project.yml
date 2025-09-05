@@ -37,6 +37,35 @@ models:
   dbt_goonj:
     # Default materialization for all models
     +materialized: table
+    
+    # Staging models - raw data extraction
+    staging:
+      +materialized: table
+      +schema: "staging"
+      salesforce:
+        +materialized: table
+        +schema: "staging_salesforce"
+        
+    # Intermediate models - data cleaning and business logic
+    intermediate:
+      +materialized: table
+      +schema: "intermediate"
+      salesforce:
+        +materialized: table
+        +schema: "intermediate_salesforce"
+        
+    # Analysis models - final insights and reporting
+    analysis:
+      +materialized: table
+      +schema: "analysis"
+      salesforce:
+        +materialized: table
+        +schema: "analysis_salesforce"
+        
+    # Production models - final output
+    prod:
+      +materialized: table
+      +schema: "prod"
       
   elementary:
     +schema: "elementary"

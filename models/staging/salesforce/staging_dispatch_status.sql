@@ -52,3 +52,13 @@ SELECT
     "From_which_Processing_Center__c" AS from_which_processing_center,
     "Loading_and_Truck_Images_Link__c" AS loading_and_truck_images_link
 FROM {{ source('staging_salesforce', 'dispatch_status') }}
+
+WHERE
+    -- Don't include deleted records
+    "IsDeleted" = FALSE
+    
+    -- Make sure we have the basic information we need
+    AND "Id" IS NOT NULL
+    AND "CreatedDate" IS NOT NULL
+
+ORDER BY "CreatedDate" DESC, "Id"
