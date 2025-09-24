@@ -31,7 +31,7 @@ SELECT
     "District__c" AS district,
     "Block__c" AS block,
     "Other_Block__c" AS other_block,
-    "Locality_Village_Name__c" AS locality_village_name,
+    "Locality_Village_Name__c" AS village_name,
     "Tola_Mohalla__c" AS tola_mohalla,
     
     -- Distribution details
@@ -83,3 +83,5 @@ SELECT
     "_airbyte_extracted_at",
     "_airbyte_meta"
 FROM {{ source('staging_salesforce', 'distribution') }}
+WHERE "Date_Of_Distribution__c" >= '2021-04-01'
+    AND "Date_Of_Distribution__c" IS NOT NULL 
