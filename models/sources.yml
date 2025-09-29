@@ -35,7 +35,11 @@ sources:
       - name: distribution_line
         identifier: Distribution_Line__c
         description: <table_description>
-      
+        
+      - name: dispatch_received_status
+        identifier: Dispatch_Received_Status__c
+        description: <table_description>
+
       - name: dispatch_received_status_line_item
         identifier: Dispatch_Received_Status_Line_Item__c
         description: <table_description>
@@ -65,7 +69,7 @@ sources:
         description: <table_description>
       
       - name: account
-        identifier: Account
+        identifier: Account 
         description: <table_description>
       
       - name: distribution_activities
