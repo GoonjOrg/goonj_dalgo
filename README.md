@@ -75,11 +75,158 @@ FROM {{ source('staging_salesforce', 'your_table_name') }}
    - `schema`: Database schema containing the raw tables
    - `identifier`: Exact table name in the database (often includes Salesforce `__c` suffix)
 
-### Using the project
+## dbt Project Components
 
-Try running the following commands:
-- dbt run
-- dbt test
+### 🏗️ **Generate Schema Name Macro**
+
+The project includes a custom `generate_schema_name` macro (`macros/generate_schema_name.sql`) that automatically creates schema names based on:
+
+**Logic:**
+- Detects the folder structure in your model path (staging, intermediate, prod)
+- Combines target environment (dev/prod) with layer and source system
+- Handles special cases like elementary package models
+
+**Schema Creation Pattern:**
+```
+{target}_{layer}_{source_system}
+```
+
+**Examples:**
+- `models/staging/salesforce/staging_kit.sql` → `dev_staging_salesforce` (local) / `prod_staging_salesforce` (production)
+- `models/intermediate/salesforce/int_kit.sql` → `dev_intermediate_salesforce` (local) / `prod_intermediate_salesforce` (production)
+- `models/prod/salesforce/kit_summary.sql` → `dev` (local) / `prod` (production)
+
+### 📋 **Sources Configuration (sources.yml)**
+
+The `models/sources.yml` file defines external data sources that staging models reference. This file maps dbt source names to actual database tables.
+
+**Structure:**
+```yaml
+sources:
+  - name: staging_salesforce           # Source system name
+    schema: staging_salesforce         # Database schema name
+    tables:
+      - name: kit                      # dbt reference name
+        identifier: Kit__c             # Actual table name in database
+        description: <table_description>
+```
+
+**When to Update sources.yml:**
+1. **New data source**: Add a new source when Dalgo pushes data from a new system
+2. **New table**: Add table definitions when new tables are available in existing sources
+3. **Table changes**: Update `identifier` if actual table names change in the database
+
+**How to Reference Sources in Models:**
+```sql
+FROM {{ source('staging_salesforce', 'kit') }}
+-- This resolves to: staging_salesforce.Kit__c
+```
+
+**Key Requirements:**
+- `name`: Must match the schema where Dalgo pushes raw data
+- `identifier`: Must exactly match the table name in the database (including Salesforce `__c` suffixes)
+- `description`: Document what each table contains
+
+## dbt Commands Reference
+
+### 🚀 **Core Development Commands**
+
+**`dbt run`**
+- Executes all models in dependency order
+- Creates/updates tables and views in your database
+- Use `dbt run --select model_name` to run specific models
+
+**`dbt test`**
+- Runs data quality tests defined in schema.yml files
+- Validates relationships, uniqueness, null checks, etc.
+- Essential for ensuring data integrity
+
+**`dbt build`**
+- Combines `dbt run` and `dbt test` in one command
+- Runs models and tests together, stopping on failures
+- Recommended for comprehensive validation
+
+### 📚 **Documentation Commands**
+
+**`dbt docs generate`**
+- Creates interactive documentation from your project
+- Generates lineage graphs showing data flow
+- Includes model descriptions, column details, and relationships
+
+**`dbt docs serve`**
+- Serves documentation locally at http://localhost:8080
+- Run after `dbt docs generate` to view documentation
+
+### 🧹 **Project Management Commands**
+
+**`dbt deps`**
+- Installs packages defined in `packages.yml`
+- Downloads dependencies like dbt_utils, dbt_expectations
+- Run this after cloning the project or updating packages
+
+**`dbt clean`**
+- Removes `target/` and `dbt_packages/` directories
+- Cleans up generated files and cached data
+- Useful for fresh starts or troubleshooting
+
+**`dbt compile`**
+- Compiles models to raw SQL without executing
+- Useful for debugging Jinja logic and checking generated SQL
+- Output appears in `target/compiled/` directory
+
+### 🎯 **Selective Execution**
+
+**Model Selection:**
+```bash
+dbt run --select staging_kit                    # Run specific model
+dbt run --select staging.salesforce            # Run all models in folder
+dbt run --select +staging_kit                  # Run model and upstream dependencies
+dbt run --select staging_kit+                  # Run model and downstream dependencies
+```
+
+**Tag-based Selection:**
+```bash
+dbt run --select tag:salesforce                # Run models with specific tag
+dbt test --select tag:staging                  # Test models with staging tag
+```
+
+### 🔧 **Development Workflow**
+
+**Typical Development Cycle:**
+1. `dbt deps` - Install dependencies (first time setup)
+2. `dbt run --select your_model` - Test your changes
+3. `dbt test --select your_model` - Validate data quality
+4. `dbt build --select your_model+` - Run model and downstream tests
+5. `dbt docs generate && dbt docs serve` - Update and view documentation
+
+**Before Committing:**
+```bash
+dbt build                    # Run all models and tests
+dbt docs generate           # Update documentation
+```
+
+### 🚨 **Troubleshooting Commands**
+
+**`dbt debug`**
+- Validates your dbt installation and profiles
+- Checks database connections
+- First command to run when having issues
+
+**`dbt ls`**
+- Lists all models, tests, and sources in your project
+- Useful for understanding project structure
+- Use `dbt ls --select` to preview what would run
+
+### Using the Project
+
+**Getting Started:**
+```bash
+dbt deps                    # Install package dependencies
+dbt debug                   # Verify setup
+dbt run                     # Build all models
+dbt test                    # Run all tests
+dbt docs generate           # Generate documentation
+```
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
