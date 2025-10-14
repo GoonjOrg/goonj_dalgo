@@ -43,22 +43,22 @@ SELECT
     activity_last_modified_by_id,
     
     -- Student participation metrics
-    total_students,
-    male_students,
-    female_students,
-    activity_with_students,
-    activity_without_students,
+    --total_students,
+    --_students,
+    --female_students,
+    --activity_with_students,
+    --activity_without_students,
     
     -- Additional participant metrics
-    cfw_participants,
-    njpc_participants,
-    count_of_da,
-    number_of_activities,
+    --cfw_participants,
+    --njpc_participants,
+    --count_of_da,
+    --number_of_activities,
     
     -- Quality and compliance metrics
-    form_checked,
-    disclaimer_filled,
-    from_mobile_app,
+    --form_checked,
+    --disclaimer_filled,
+    --from_mobile_app,
     
     -- Photo documentation metrics
     has_before_photo,
@@ -71,14 +71,14 @@ SELECT
     njpc_photo_info,
     
     -- Additional fields for analysis
-    objective_of_dfw_work,
+    objective_of_cfw_work,
     target_community,
     type_of_educational_entity,
     measurement_type,
     remarks,
-    education_and_health,
+    is_education_and_health,
     other_block,
-    other
+    other_village
 
 FROM {{ ref('int_activity_summary') }}
 

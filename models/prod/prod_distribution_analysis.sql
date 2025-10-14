@@ -11,7 +11,7 @@ WITH base_data AS (
         district,
         block,
         other_block,
-        village_name,
+        village,
         type_of_initiative,
         no_of_families_reached,
         quantity,
@@ -33,13 +33,13 @@ state_district_metrics AS (
         state,
         district,
         COUNT(DISTINCT distribution_id) as distributions_count,
-        COUNT(DISTINCT CONCAT(
-            state, '|', 
-            district, '|', 
-            COALESCE(block, ''), '|', 
-            COALESCE(other_block, ''), '|', 
-            COALESCE(village_name, 'Unknown')
-        )) as villages_reached,
+        --COUNT(DISTINCT CONCAT(
+        --    state, '|', 
+        --    district, '|', 
+        --    COALESCE(block, ''), '|', 
+        --    COALESCE(other_block, ''), '|', 
+        --    COALESCE(village_name, 'Unknown')
+        --)) as villages_reached,
         SUM(COALESCE(no_of_families_reached, 0) + COALESCE(quantity, 0)) as total_families_reached
     FROM base_data
     WHERE financial_year >= '2021-22'
@@ -51,7 +51,7 @@ SELECT
     financial_year,
     'All States' as states_reached,
     COUNT(DISTINCT state) as districts_reached,
-    SUM(villages_reached) as total_villages_reached,
+    --SUM(villages_reached) as total_villages_reached,
     SUM(distributions_count) as total_distributions,
     NULL as disaster_types_covered,
     NULL as emergency_types_covered,
@@ -70,7 +70,7 @@ SELECT
     financial_year,
     state as states_reached,
     COUNT(DISTINCT district) as districts_reached,
-    SUM(villages_reached) as total_villages_reached,
+    --SUM(villages_reached) as total_villages_reached,
     SUM(distributions_count) as total_distributions,
     NULL as disaster_types_covered,
     NULL as emergency_types_covered,
@@ -89,7 +89,7 @@ SELECT
     bd.financial_year,
     bd.type_of_initiative as states_reached,
     NULL as districts_reached,
-    NULL as total_villages_reached,
+    --NULL as total_villages_reached,
     COUNT(DISTINCT bd.distribution_id) as total_distributions,
     NULL as disaster_types_covered,
     NULL as emergency_types_covered,

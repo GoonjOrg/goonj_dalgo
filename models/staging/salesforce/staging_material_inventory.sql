@@ -7,7 +7,7 @@
 SELECT
     -- Basic system information
     "Id" AS material_inventory_id,
-    "Name" AS material_name,
+    "Name" AS material_inventory_name,
     "OwnerId" AS owner_id,
     "Other__c" AS other,
     "Store__c" AS store,

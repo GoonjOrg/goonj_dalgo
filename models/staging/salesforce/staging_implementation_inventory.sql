@@ -49,7 +49,7 @@ SELECT
     "Purchased_Created_Received__c" AS purchased_created_received,
     "Center_Field_office_District__c" AS center_field_office_district,
     "Dispatch_Received_Status_Line_Item__c" AS dispatch_received_status_line_item,
-    "Implementation_Material_sub_Category__c" AS implementation_material_sub_category
+    "Implementation_Material_sub_Category__c" AS material_sub_category
 
 FROM {{ source('staging_salesforce', 'implementation_inventory') }}
 

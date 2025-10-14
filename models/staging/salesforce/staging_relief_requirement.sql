@@ -6,8 +6,8 @@
 
 SELECT
     -- Basic system information
-    "Id" AS relief_requirement_id,
-    "Name" AS relief_requirement_name,
+    "Id" AS demand_id,
+    "Name" AS demand_name,
     "Name__c" AS name_custom,
     "OwnerId" AS owner_id,
     "Type__c" AS type,

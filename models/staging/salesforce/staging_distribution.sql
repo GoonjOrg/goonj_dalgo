@@ -6,77 +6,74 @@
 SELECT
     -- Standard Salesforce fields
     "Id" AS distribution_id,
-    "Name",
-    "OwnerId",
-    "IsDeleted",
-    "CreatedById",
-    "CreatedDate",
-    "LastModifiedById",
-    "LastModifiedDate",
-    "SystemModstamp",
-    "RecordTypeId",
-    
-    -- Custom fields - Personal Information
-    "Age__c" AS age,
-    "Name__c" AS name_c,
-    "Gender__c" AS gender,
-    "Father_Mother_Name__c" AS father_mother_name,
-    "Monthly_Income__c" AS monthly_income,
-    "Present_Occupation__c" AS present_occupation,
-    "No_of_family_members__c" AS no_of_family_members,
-    "Phone_Number__c" AS phone_number,
+    "Name" AS distribution_name,
+    "OwnerId" AS owner_id,
+    "IsDeleted" AS is_deleted,
+    "CreatedById" AS created_by_id,
+    "CreatedDate" AS created_date,
+    "LastModifiedById" AS last_modified_by_id,
+    "LastModifiedDate" AS last_modified_date,
+    "SystemModstamp" AS system_mod_stamp,
+    "RecordTypeId" AS record_type_id,
     
     -- Location fields
     "State__c" AS state,
     "District__c" AS district,
     "Block__c" AS block,
     "Other_Block__c" AS other_block,
-    "Locality_Village_Name__c" AS village_name,
+    "Locality_Village_Name__c" AS village,
+    "Other__c" AS other_village,
     "Tola_Mohalla__c" AS tola_mohalla,
     
-    -- Distribution details
+    -- Basic details
     "Date_Of_Distribution__c" AS date_of_distribution,
-    "Distributed_To__c" AS distributed_to,
-    "Material_given_for__c" AS material_given_for,
     "Type_of_Initiative__c" AS type_of_initiative,
+    "Name_of_Account__c" AS account_name,
     "Type_of_Community__c" AS type_of_community,
-    "Reached_To__c" AS reached_to,
-    
+
     -- Process and verification fields
-    "Entered_by__c" AS entered_by,
-    "Surveyed_By__c" AS surveyed_by,
     "Cross_checked_by__c" AS cross_checked_by,
-    "Approved_Verified_By__c" AS approved_verified_by,
-    "Team_or_External__c" AS team_or_external,
-    "Monitored_By_Distributor__c" AS monitored_by_distributor,
+    "Entered_by__c" AS entered_by,
     
-    -- Contact and organization fields
-    "Name_of_POC__c" AS name_of_poc,
-    "POC_Contact_No__c" AS poc_contact_no,
-    "Name_of_Account__c" AS name_of_account,
-    "Group_s_Name__c" AS group_s_name,
-    "Centre_s_Name__c" AS centre_s_name,
-    
-    -- Metrics and counts
-    "Count_of_DA__c" AS count_of_da,
-    "No_of_Families_Reached__c" AS no_of_families_reached,
-    "No_Of_Individual_Reached__c" AS no_of_individuals_reached,
-    "Number_of_distributions__c" AS number_of_distributions,
-    
+
     -- Documentation and photos
+    "Remarks__c" AS remarks,
     "Picture_Status__c" AS picture_status,
     "Reports_Cross_checked__c" AS reports_cross_checked,
     "Disclaimer_Photographs__c" AS disclaimer_photographs,
     "Photograph_information__c" AS photograph_information,
     "Receiver_List_Photographs__c" AS receiver_list_photographs,
-    
-    -- Additional details
-    "Remarks__c" AS remarks,
-    "Any_Other_Relevant_Details__c" AS any_other_relevant_details,
-    
+
+    --S2S & Education and Health
+    "School_Aanganwadi_Learning_Center_Name__c" AS school_name,
+    "Type_of_educational_entity__c" AS school_type,
+
+    --Rahat & SI
+    "Disaster_Type__c" AS disaster_type,
+
+    --Vapsi
+    "Surveyed_By__c" AS surveyed_by,
+    "Monitored_By_Distributor__c" AS monitored_by_distributor,
+    "Approved_Verified_By__c" AS approved_verified_by,
+    "Team_or_External__c" AS team_or_external,
+    "Name_of_POC__c" AS poc_name,
+    "POC_Contact_No__c" AS poc_number,
+    "Reached_To__c" AS reached_to,
+    "Any_Other_Document_Submitted__c" AS other_documents,
+
+    --specific initiative
+    "Centre_s_Name__c" AS centre_name,
+    "Share_a_Brief_Provided_Material__c" AS brief_material_desc,
+    "How_the_Material_Makes_a_Difference__c" AS how_material_diff,
+    "The_material_provided_as_part_of_Rahat__c" AS is_rahat,
+    "Material_given_for__c" AS material_given_for,
+    "No_of_Families_Reached__c" AS no_of_families_reached,
+    "No_Of_Individual_Reached__c" AS no_of_individuals_reached,
+    "Other_Details__c" AS other_si_details,
+
+
     -- System integration fields
     "Is_Created_from_Avni__c" AS is_created_from_avni,
-    "DA_Indicator_For_Avni__c" AS da_indicator_for_avni,
     
     -- Airbyte metadata
     "_airbyte_raw_id",
@@ -85,3 +82,5 @@ SELECT
 FROM {{ source('staging_salesforce', 'distribution') }}
 WHERE "Date_Of_Distribution__c" >= '2021-04-01'
     AND "Date_Of_Distribution__c" IS NOT NULL 
+       
+

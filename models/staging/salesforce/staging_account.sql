@@ -8,6 +8,9 @@ SELECT
     -- Basic system information
     "Id" AS account_id,
     "Name" AS account_name,
+    "State__c" AS state,
+    "District__c" AS district,
+    "Block__c" AS block,
     "OwnerId" AS owner_id,
     "CreatedById" AS created_by_id,
     "CreatedDate" AS created_date,
