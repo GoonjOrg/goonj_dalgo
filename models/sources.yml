@@ -87,3 +87,14 @@ sources:
       - name: relief_requirement
         identifier: Relief_Requirement__c
         description: <table_description>
+
+  - name: staging_avni
+    schema: staging_avni
+    tables:
+      - name: encounters
+        identifier: encounters
+        description: <table_description>
+      
+      - name: subjects
+        identifier: subjects
+        description: <table_description>
