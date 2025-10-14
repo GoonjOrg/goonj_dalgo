@@ -1,0 +1,27 @@
+{{ config(
+    materialized='table',
+    tags=['activities_by_type', 'prod', 'salesforce']
+) }}
+
+select 
+    annual_year,
+    month,
+    quarter,
+    state,
+    district,
+    account_name,
+    account_type,
+    type_of_initiative,
+    activity_type,
+    activity_category,
+    activity_sub_type,
+    sum(number_of_activities) as num_activities,
+    count(distinct activity_id) as activity_count,
+    sum(num_cfw_female) as num_cfw_female,
+    sum(num_cfw_male) as num_cfw_male,
+    sum(num_cfw_others) as num_cfw_others,
+    sum(num_working_days) as num_working_days
+from 
+{{ ref('int_activities') }}
+where type_of_initiative='CFW'
+Group by annual_year, month, quarter, state, district, account_name, account_type, type_of_initiative, activity_type, activity_category, activity_sub_type

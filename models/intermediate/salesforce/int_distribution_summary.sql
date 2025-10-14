@@ -9,42 +9,43 @@ WITH financial_year_data AS (
             WHEN EXTRACT(MONTH FROM date_of_distribution) >= 4 
             THEN EXTRACT(YEAR FROM date_of_distribution)::text || '-' || RIGHT((EXTRACT(YEAR FROM date_of_distribution) + 1)::text, 2)
             ELSE (EXTRACT(YEAR FROM date_of_distribution) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM date_of_distribution)::text, 2)
-        END AS financial_year,
+        END AS financial_year
         -- Combine all village information including other villages
-        COALESCE(original_village_name, other_block, 'Unknown') as village_name
+        --COALESCE(original_village_name, other_block, 'Unknown') as village_name
     FROM (
         SELECT 
             -- Distribution header information
             d.distribution_id,
-            d."Name" as distribution_name,
-            d.age,
-            d.name_c,
-            d.gender,
+            d.distribution_name,
+            --d.age,
+            --d.name_c,
+            --d.gender,
             d.state,
             d.district,
             d.block,
             d.other_block,
             d.tola_mohalla,
-            d.village_name as original_village_name,
+            d.village,
+            d.other_village,
             
             -- Personal information
-            d.father_mother_name,
-            d.phone_number,
-            d.monthly_income,
-            d.present_occupation,
-            d.no_of_family_members,
+            --d.father_mother_name,
+            --d.phone_number,
+            --d.monthly_income,
+            --d.present_occupation,
+            --d.no_of_family_members,
             
             -- Distribution specifics
             d.date_of_distribution,
-            d.distributed_to,
+            --d.distributed_to,
             d.material_given_for,
-            d.number_of_distributions,
+            --d.number_of_distributions,
             
             -- Community context
             d.type_of_community,
             d.type_of_initiative,
-            d.group_s_name,
-            d.centre_s_name,
+            --d.group_s_name,
+            d.centre_name,
             
             -- Educational context (fields not available in staging_distribution)
             -- d.type_of_educational_entity,
@@ -59,10 +60,10 @@ WITH financial_year_data AS (
             d.team_or_external,
             
             -- Impact metrics
-            d.count_of_da,
+            --d.count_of_da,
             d.no_of_families_reached,
             d.no_of_individuals_reached,
-            d.reached_to,
+            --d.reached_to,
             
             -- Documentation
             d.picture_status,
@@ -72,7 +73,7 @@ WITH financial_year_data AS (
             
             -- Integration
             d.is_created_from_avni,
-            d.da_indicator_for_avni,
+            --d.da_indicator_for_avni,
             
             -- Quality control
             d.reports_cross_checked,
@@ -80,13 +81,13 @@ WITH financial_year_data AS (
             
             -- Additional info
             d.remarks,
-            d.any_other_relevant_details,
+            --d.any_other_relevant_details,
             -- d.share_a_brief_provided_material,
             -- d.how_the_material_makes_a_difference,
             
             -- Point of contact
-            d.name_of_poc,
-            d.poc_contact_no,
+            --d.name_of_poc,
+            --d.poc_contact_no,
             
             -- Distribution context (fields not available in staging_distribution)
             -- d.disaster_type,
@@ -97,22 +98,22 @@ WITH financial_year_data AS (
             
             -- Distribution line item information
             dl.distribution_line_id,
-            dl."Name" as distribution_line_name,
+            dl.distribution_line_name,
             dl.quantity,
             dl.unit,
-            dl.dispatched_to,
-            dl.implementation_inventory,
-            dl.avni_implementation_inventory,
+            dl.distributed_to,
+            dl.implementation_inventory_id,
+            --dl.avni_implementation_inventory,
             dl.is_created_from_avni as line_is_created_from_avni,
             
             -- System fields
-            d."OwnerId" as distribution_owner_id,
-            d."IsDeleted" as distribution_is_deleted,
-            d."CreatedById" as distribution_created_by_id,
-            d."CreatedDate" as distribution_created_date,
-            dl."CreatedDate" as distribution_line_created_date,
-            d."LastModifiedDate" as distribution_last_modified_date,
-            dl."LastModifiedDate" as distribution_line_last_modified_date
+            --d."OwnerId" as distribution_owner_id,
+            --d."IsDeleted" as distribution_is_deleted,
+            --d.distribution_created_by_id,
+            d.created_date as distribution_created_date,
+            dl.created_date as distribution_line_created_date,
+            d.last_modified_date as distribution_last_modified_date,
+            dl.last_modified_date as distribution_line_last_modified_date
 
         FROM {{ ref('staging_distribution') }} d
         LEFT JOIN {{ ref('staging_distribution_line') }} dl 
@@ -125,61 +126,58 @@ WITH financial_year_data AS (
 SELECT 
     distribution_id,
     distribution_name,
-    age,
-    name_c,
-    gender,
     state,
     district,
     block,
     other_block,
+    village,
+    other_village
     tola_mohalla,
-    original_village_name,
-    village_name,
-    father_mother_name,
-    phone_number,
-    monthly_income,
-    present_occupation,
-    no_of_family_members,
+    --father_mother_name,
+    --phone_number,
+    --monthly_income,
+    --present_occupation,
+    --no_of_family_members,
     date_of_distribution,
-    distributed_to,
+    --distributed_to,
     material_given_for,
-    number_of_distributions,
+    --number_of_distributions,
     type_of_community,
     type_of_initiative,
-    group_s_name,
-    centre_s_name,
-    entered_by,
-    surveyed_by,
-    cross_checked_by,
-    approved_verified_by,
+    --group_s_name,
+    centre_name,
+    --entered_by,
+    --surveyed_by,
+    --cross_checked_by,
+    --approved_verified_by,
     team_or_external,
-    count_of_da,
+    --count_of_da,
     no_of_families_reached,
     no_of_individuals_reached,
-    reached_to,
+    --reached_to,
     picture_status,
     photograph_information,
     disclaimer_photographs,
     receiver_list_photographs,
     is_created_from_avni,
-    da_indicator_for_avni,
+    --da_indicator_for_avni,
     reports_cross_checked,
-    monitored_by_distributor,
+    --monitored_by_distributor,
     remarks,
-    any_other_relevant_details,
-    name_of_poc,
-    poc_contact_no,
+    --any_other_relevant_details,
+    --name_of_poc,
+    --poc_contact_no,
     distribution_line_id,
     distribution_line_name,
     quantity,
     unit,
-    dispatched_to,
-    implementation_inventory,
-    avni_implementation_inventory,
+    distributed_to,
+    implementation_inventory_id,
+    --avni_implementation_inventory,
     line_is_created_from_avni,
-    distribution_owner_id,
-    distribution_is_deleted,
-    distribution_created_by_id,
+    --distribution_owner_id,
+    --distribution_is_deleted,
+    --distribution_created_by_id,
     distribution_created_date,
     distribution_line_created_date,
     distribution_last_modified_date,

@@ -5,8 +5,8 @@
 ) }}
 
 SELECT
-    "Id" AS id,
-    "Name" AS name,
+    "Id" AS dispatch_received_status_line_item_id,
+    "Name" AS dispatch_received_status_line_item_name,
     "Unit__c" AS unit_c,
     "IsDeleted" AS is_deleted,
     "CreatedById" AS created_by_id,

@@ -6,8 +6,8 @@
 SELECT 
     -- Kit information
     k.kit_id,
-    k."Name" as kit_name,
-    k.type as kit_type,
+    k.kit_name,
+    k.kit_type,
     k.kit_status,
     k.kit_sub_type,
     k.current_quantity as kit_current_quantity,
@@ -16,7 +16,7 @@ SELECT
     
     -- Dispatch line item information  
     dli.dispatch_line_item_id,
-    dli."Name" as dispatch_line_item_name,
+    dli.dispatch_line_item_name,
     dli.quantity as dispatch_quantity,
     dli.unit,
     dli.material_code,
@@ -31,18 +31,16 @@ SELECT
     
     -- Dispatch status information
     ds.dispatch_id,
-    ds."Name" as dispatch_name,
+    ds.dispatch_name,
     ds.dispatch_date,
-    ds.dispatch_city,
-    ds.dispatch_state,
-    ds.dispatch_district,
-    ds.dispatch_country,
+    ds.city,
+    ds.state,
+    ds.district,
+    ds.country,
     -- having duplicate of the same columns for cross-filtering purposes
-    ds.dispatch_state as state,
-    ds.dispatch_district as district,
-    ds.dispatch_country as country,
-    ds.dispatch_pincode,
-    ds.dispatch_street,
+   
+    ds.pincode,
+    ds.street,
     ds.goonj_office,
     ds.transporter,
     ds.vehicle_number,
@@ -58,8 +56,8 @@ SELECT
     ds.from_which_processing_center as dispatch_from_processing_center,
     
     -- Timestamps
-    dli."CreatedDate" as dispatch_line_item_created_date,
-    ds."CreatedDate" as dispatch_created_date,
+    dli.created_date as dispatch_line_item_created_date,
+    ds.created_date as dispatch_created_date,
     k.kit_creation_date
 
 FROM {{ ref('staging_kit') }} k
