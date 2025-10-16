@@ -5,12 +5,12 @@
 
 
 select
-state,
-district,
-block,
-village,
-other_block,
-other_village,
+a.state,
+a.district,
+a.block,
+a.village,
+a.other_block,
+a.other_village,
 CASE 
     WHEN EXTRACT(MONTH FROM activity_end_date) >= 4 
         THEN EXTRACT(YEAR FROM activity_end_date)::text || '-' || RIGHT((EXTRACT(YEAR FROM activity_end_date) + 1)::text, 2)
@@ -33,15 +33,15 @@ type_of_educational_entity,
 measurement_type,
 activity_id,
 activity_name,
-created_date,
-last_modified_date,
-created_by_id,
+a.created_date,
+a.last_modified_date,
+a.created_by_id,
 remarks,
 is_education_and_health,
 number_of_activities,
 school_name,
-account_name,
-case when account_name like '%Goonj%' then 'Self' else 'Partner' end as account_type,
+account.account_name,
+case when account.account_name like '%Goonj%' then 'Self' else 'Partner' end as account_type,
 num_working_days,
 num_cfw_female,
 num_cfw_male,
@@ -54,5 +54,8 @@ num_njpc_female,
 num_njpc_male,
 num_njpc_others
 
-from {{ ref('staging_activity') }}
-where is_deleted=False 
+from {{ ref('staging_activity') }} a
+left join
+{{ref('staging_account')}} account on a.account_name = account.account_id
+
+where a.is_deleted=False 

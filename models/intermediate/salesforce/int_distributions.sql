@@ -17,7 +17,8 @@ SELECT
     d.date_of_distribution,
     d.type_of_community,
     d.type_of_initiative,
-    d.account_name,
+    account.account_name,
+    case when account.account_name like '%Goonj%' then 'Self' else 'Partner' end as distributor_account_type,    
     d.remarks,
     d.reports_cross_checked,
     d.is_created_from_avni,
@@ -54,11 +55,6 @@ SELECT
     END AS quarter,
     TO_CHAR(date_of_distribution, 'Mon') as month,
     
-    
-    case when d.account_name like '%Goonj%' then 'Self' else 'Partner' end as distributor_account_type,   
-
-    
-
     --Timestamps
     d.created_date,
     d.last_modified_date,
@@ -92,5 +88,7 @@ LEFT JOIN {{ ref('staging_distribution_line') }} dl
             ON d.distribution_id = dl.distribution_id   
 LEFT JOIN {{ ref('staging_implementation_inventory') }} i 
             ON dl.implementation_inventory_id = i.implementation_inventory_id
+left join
+{{ref('staging_account')}} account on d.account_name = account.account_id
 
-
+where d.is_deleted=False
