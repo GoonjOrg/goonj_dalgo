@@ -58,10 +58,25 @@ SELECT
     -- Timestamps
     dli.created_date as dispatch_line_item_created_date,
     ds.created_date as dispatch_created_date,
-    k.kit_creation_date
+    k.kit_creation_date,
+
+     senderaccount.account_name as processing_center_name,
+    senderaccount.account_type as processing_center_type,
+    senderaccount.state as processing_state,
+    senderaccount.district as procssing_district,
+    receiveraccount.account_name as receiver_center_name,
+    receiveraccount.account_type as receiver_center_type,
+    receiveraccount.state as receiver_state,
+    receiveraccount.district as receiver_district,
+    case when receiveraccount.account_name like '%Goonj%' then 'Self' else 'Partner' end as dispatched_account_type    
+
 
 FROM {{ ref('staging_kit') }} k
 JOIN {{ ref('staging_dispatch_line_items') }} dli 
     ON k.kit_id = dli.kit_id
 JOIN {{ ref('staging_dispatch_status') }} ds 
     ON dli.dispatch_status = ds.dispatch_id
+left join
+{{ref('staging_account')}} senderaccount on ds.from_which_processing_center = senderaccount.account_id
+left join
+{{ref('staging_account')}} receiveraccount on ds.receiving_account_id = receiveraccount.account_id

@@ -9,8 +9,10 @@ select
 demands.annual_year,
 demands.processing_center,
 demands.disaster_type,
+demands.dispatch_stage,
+demands.internal_demand,
 count(distinct case dispatched_account_type when 'Self' then dispatch_id else null end) as num_self_dispatches,
-count(distinct case dispatched_account_type when 'Partner' then dispatch_id else null end) as num_external_dispatches,
+count(distinct case dispatched_account_type when 'Partner' then dispatch_id else null end) as num_partner_dispatches,
 sum(quantity) as total_kit_count,
 count(distinct dispatch_id) as total_dispatches,
 count(distinct demands.demand_id) as total_demands,
@@ -22,5 +24,5 @@ from
 {{ ref('int_demands') }}as demands 
 left JOIN {{ ref('int_dispatches') }} as dispatches on dispatches.demand_id = demands.demand_id
 where demands.demand_status!='Closed' and demands.post_validation_status!='Closed'
-group by demands.annual_year, demands.processing_center, demands.disaster_type
+group by demands.annual_year, demands.processing_center, demands.disaster_type, demands.dispatch_stage,demands.internal_demand
 

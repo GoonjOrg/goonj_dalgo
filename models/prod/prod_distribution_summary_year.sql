@@ -15,7 +15,7 @@ with annual_new_geo as (
 
 SELECT
     distributions.annual_year,
-    distributions.disaster_type,
+    --distributions.disaster_type,
     count(distinct state) as state_count,
     count(distinct (state,district)) as district_count,
     count(distinct (state,district,block)) as block_count,
@@ -38,11 +38,11 @@ SELECT
     sum(case kit_type when 'S2S-AW' then  quantity else 0 end) as s2s_aw_kit_count,
     sum(case when kit_type not in ('CFW', 'My Pad Woman', 'S2S', 'S2S-AW') then quantity else 0 end) as other_kit_count,
     count(distinct case distributor_account_type when 'Self' then distribution_id else null end) as num_self_distributions,
-    count(distinct case distributor_account_type when 'Partner' then distribution_id else null end) as num_external_distributions,
+    count(distinct case distributor_account_type when 'Partner' then distribution_id else null end) as num_partner_distributions,
     annual_new_geo.new_state_count,
     annual_new_geo.new_district_count
     
 FROM 
 {{ ref('int_distributions') }} as distributions join annual_new_geo on distributions.annual_year=annual_new_geo.annual_year
 where distributions.is_deleted=False 
-Group by distributions.annual_year, annual_new_geo.new_state_count, annual_new_geo.new_district_count,distributions.disaster_type
+Group by distributions.annual_year, annual_new_geo.new_state_count, annual_new_geo.new_district_count
