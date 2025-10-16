@@ -7,7 +7,7 @@
 
 select
 demands.annual_year,
-demands.processing_center,
+dispatches.receiver_center_name,
 demands.disaster_type,
 demands.dispatch_stage,
 demands.internal_demand,
@@ -24,5 +24,5 @@ from
 {{ ref('int_demands') }}as demands 
 left JOIN {{ ref('int_dispatches') }} as dispatches on dispatches.demand_id = demands.demand_id
 where demands.demand_status!='Closed' and demands.post_validation_status!='Closed'
-group by demands.annual_year, demands.processing_center, demands.disaster_type, demands.dispatch_stage,demands.internal_demand
+group by demands.annual_year, dispatches.receiver_center_name, demands.disaster_type, demands.dispatch_stage,demands.internal_demand
 
