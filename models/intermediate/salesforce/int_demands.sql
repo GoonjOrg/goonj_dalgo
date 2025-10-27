@@ -13,6 +13,13 @@ SELECT
             THEN EXTRACT(YEAR FROM rr.date_of_engagement)::text || '-' || RIGHT((EXTRACT(YEAR FROM rr.date_of_engagement) + 1)::text, 2)
             ELSE (EXTRACT(YEAR FROM rr.date_of_engagement) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM rr.date_of_engagement)::text, 2)
         END AS annual_year,
+    CASE 
+    WHEN EXTRACT(MONTH FROM rr.date_of_engagement) BETWEEN 4 AND 6 THEN 'Q1'
+    WHEN EXTRACT(MONTH FROM rr.date_of_engagement) BETWEEN 7 AND 9 THEN 'Q2'
+    WHEN EXTRACT(MONTH FROM rr.date_of_engagement) BETWEEN 10 AND 12 THEN 'Q3'
+    WHEN EXTRACT(MONTH FROM rr.date_of_engagement) BETWEEN 1 AND 3 THEN 'Q4'
+    END AS quarter,
+    TO_CHAR(rr.date_of_engagement, 'Mon') as month, 
     case when account.account_name like '%Goonj%' then 'Self' else 'Partner' end as account_type,    
     rr.date_of_engagement as demand_date,
     rr.created_date as demand_created_date,
