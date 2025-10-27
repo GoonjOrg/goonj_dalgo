@@ -68,8 +68,19 @@ SELECT
     receiveraccount.account_type as receiver_center_type,
     receiveraccount.state as receiver_state,
     receiveraccount.district as receiver_district,
-    case when receiveraccount.account_name like '%Goonj%' then 'Self' else 'Partner' end as dispatched_account_type    
-
+    case when receiveraccount.account_name like '%Goonj%' then 'Self' else 'Partner' end as dispatched_account_type,   
+    CASE 
+        WHEN EXTRACT(MONTH FROM ds.dispatch_date) >= 4 
+            THEN EXTRACT(YEAR FROM ds.dispatch_date)::text || '-' || RIGHT((EXTRACT(YEAR FROM ds.dispatch_date) + 1)::text, 2)
+        ELSE (EXTRACT(YEAR FROM ds.dispatch_date) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM ds.dispatch_date)::text, 2)
+    END AS annual_year,
+    CASE 
+    WHEN EXTRACT(MONTH FROM ds.dispatch_date) BETWEEN 4 AND 6 THEN 'Q1'
+    WHEN EXTRACT(MONTH FROM ds.dispatch_date) BETWEEN 7 AND 9 THEN 'Q2'
+    WHEN EXTRACT(MONTH FROM ds.dispatch_date) BETWEEN 10 AND 12 THEN 'Q3'
+    WHEN EXTRACT(MONTH FROM ds.dispatch_date) BETWEEN 1 AND 3 THEN 'Q4'
+    END AS quarter,
+    TO_CHAR(ds.dispatch_date, 'Mon') as month
 
 FROM {{ ref('staging_kit') }} k
 JOIN {{ ref('staging_dispatch_line_items') }} dli 
