@@ -1,0 +1,55 @@
+{{ config(
+    materialized='table',
+    tags=['distribution_activities', 'prod', 'salesforce']
+) }}
+
+select 
+    d.annual_year,
+    d.month,
+    d.monthnum,
+    d.quarter,
+    d.state,
+    d.district,
+    d.account_name,
+    d.distributor_account_type,
+    d.type_of_initiative,
+    d.created_by,
+    d.created_date,
+    distribution_id,
+    date_of_distribution,
+    source_of_material,
+    bill_name,
+    kit_type,
+    sub_type,
+    material_type,
+    material_sub_category,
+    other_material_name,
+    purchase_kit_name,
+    quantity,
+    disaster_type,
+    a.type_of_initiative as activity_initiative,
+    activity_type,
+    activity_category,
+    activity_sub_type,
+    activity_start_date,
+    activity_end_date,
+    d.activity_id,
+    number_of_activities,
+    is_education_and_health,
+    num_working_days,
+    num_cfw_female,
+    num_cfw_male,
+    num_cfw_others,
+    actvity_conducted_with_students,
+    num_s2s_participants,
+    num_s2s_days,
+    num_njpc_days,
+    num_njpc_female,
+    num_njpc_male,
+    num_njpc_others,
+    a.created_by as activity_created_by,
+    a.created_date as activity_created_date 
+from 
+{{ ref('int_distributions') }} d 
+LEFT JOIN {{ref('int_activities')}} a 
+    ON  d.activity_id=a.activity_id

@@ -64,6 +64,8 @@ SELECT
         WHEN EXTRACT(MONTH FROM ds.dispatch_date) BETWEEN 1 AND 3 THEN 'Q4'
     END AS quarter,
     TO_CHAR(ds.dispatch_date, 'Mon') as month,
+    EXTRACT(MONTH FROM ds.dispatch_date) as monthnum,
+
     senderaccount.account_name as processing_center_name,
     senderaccount.account_type as processing_center_type,
     senderaccount.state as processing_state,

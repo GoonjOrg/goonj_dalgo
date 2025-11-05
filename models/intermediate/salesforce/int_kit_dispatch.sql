@@ -80,7 +80,9 @@ SELECT
     WHEN EXTRACT(MONTH FROM ds.dispatch_date) BETWEEN 10 AND 12 THEN 'Q3'
     WHEN EXTRACT(MONTH FROM ds.dispatch_date) BETWEEN 1 AND 3 THEN 'Q4'
     END AS quarter,
-    TO_CHAR(ds.dispatch_date, 'Mon') as month
+    TO_CHAR(ds.dispatch_date, 'Mon') as month,
+    EXTRACT(MONTH FROM ds.dispatch_date) as monthnum
+
 
 FROM {{ ref('staging_kit') }} k
 JOIN {{ ref('staging_dispatch_line_items') }} dli 

@@ -54,10 +54,12 @@ SELECT
     WHEN EXTRACT(MONTH FROM date_of_distribution) BETWEEN 1 AND 3 THEN 'Q4'
     END AS quarter,
     TO_CHAR(date_of_distribution, 'Mon') as month,
-    
+    EXTRACT(MONTH FROM date_of_distribution) as monthnum,
+
     --Timestamps
     d.created_date,
     d.last_modified_date,
+    d.created_by,
 
     dl.distribution_line_id,
     dl.distribution_line_name,
@@ -80,15 +82,17 @@ SELECT
     i.material_type,
     i.material_sub_category,
     i.other_material_name,
-    i.purchase_kit_name
-
+    i.purchase_kit_name,
+    da.activity as activity_id
 
 FROM {{ ref('staging_distribution') }} d  
 LEFT JOIN {{ ref('staging_distribution_line') }} dl 
             ON d.distribution_id = dl.distribution_id   
 LEFT JOIN {{ ref('staging_implementation_inventory') }} i 
             ON dl.implementation_inventory_id = i.implementation_inventory_id
-left join
-{{ref('staging_account')}} account on d.account_name = account.account_id
+LEFT JOIN {{ref('staging_account')}} account 
+            ON d.account_name = account.account_id
+LEFT JOIN {{ref('staging_distribution_activities')}} da
+            ON d.distribution_id=da.distribution
 
 where d.is_deleted=False

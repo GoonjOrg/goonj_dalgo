@@ -6,6 +6,7 @@
 select 
     annual_year,
     month,
+    monthnum,
     quarter,
     state,
     district,
@@ -24,4 +25,4 @@ select
 from 
 {{ ref('int_activities') }}
 where type_of_initiative='CFW'
-Group by annual_year, month, quarter, state, district, account_name, account_type, type_of_initiative, activity_type, activity_category, activity_sub_type
+Group by annual_year, month, monthnum,quarter, state, district, account_name, account_type, type_of_initiative, activity_type, activity_category, activity_sub_type
