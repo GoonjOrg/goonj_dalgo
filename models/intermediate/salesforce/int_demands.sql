@@ -20,6 +20,8 @@ SELECT
     WHEN EXTRACT(MONTH FROM rr.date_of_engagement) BETWEEN 1 AND 3 THEN 'Q4'
     END AS quarter,
     TO_CHAR(rr.date_of_engagement, 'Mon') as month, 
+    EXTRACT(MONTH FROM rr.date_of_engagement) as monthnum,
+
     case when account.account_name like '%Goonj%' then 'Self' else 'Partner' end as account_type,    
     rr.date_of_engagement as demand_date,
     rr.created_date as demand_created_date,

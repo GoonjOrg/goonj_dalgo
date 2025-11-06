@@ -43,6 +43,7 @@ SELECT
 
     "OwnerId" as owner_id,                               -- Who is responsible for this activity
     "CreatedById" as created_by_id,                           -- Who created this record
+    "Created_By__c" as created_by,
     "CreatedDate" as created_date,                           -- When this was first recorded
     "LastModifiedById" as last_modified_by_id,                      -- Who last changed this record
     "LastModifiedDate" as last_modified_date,                      -- When it was last changed

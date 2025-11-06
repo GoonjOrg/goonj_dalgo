@@ -10,6 +10,7 @@ SELECT
     "OwnerId" AS owner_id,
     "IsDeleted" AS is_deleted,
     "CreatedById" AS created_by_id,
+    "Created_By__c" AS created_by,
     "CreatedDate" AS created_date,
     "LastModifiedById" AS last_modified_by_id,
     "LastModifiedDate" AS last_modified_date,
