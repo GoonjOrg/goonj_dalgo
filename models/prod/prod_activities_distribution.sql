@@ -23,7 +23,7 @@ select
     activity_end_date,
     a.activity_id,
     is_education_and_health,
-    number_of_activities
+    number_of_activities,
     num_working_days,
     num_cfw_female,
     num_cfw_male,
