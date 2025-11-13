@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    tags=['cfw_activities', 'prod', 'salesforce']
+    tags=['activities_info', 'prod', 'salesforce']
 ) }}
 
 select 
