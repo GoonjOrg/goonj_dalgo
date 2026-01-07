@@ -6,6 +6,7 @@
 select 
     annual_year,
     month,
+    monthnum,
     quarter,
     state,
     district,
@@ -20,4 +21,4 @@ select
 from 
 {{ ref('int_activities') }}
 where type_of_initiative='S2S'
-Group by annual_year, month, quarter, state, district, account_name, account_type, type_of_initiative
+Group by annual_year, month, monthnum,quarter, state, district, account_name, account_type, type_of_initiative
