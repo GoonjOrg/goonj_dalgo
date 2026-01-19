@@ -20,7 +20,7 @@ receiver_center_name,
 receiver_center_type,
 receiver_state,
 receiver_district,
-dispatched_account_type    
+receiver_account_type    
 disaster_type,
 dispatch_id,
 dispatch_name,

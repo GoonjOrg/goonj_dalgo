@@ -77,7 +77,7 @@ SELECT
     receiveraccount.account_type as receiver_center_type,
     receiveraccount.state as receiver_state,
     receiveraccount.district as receiver_district,
-    case when receiveraccount.account_name like '%Goonj%' then 'Self' else 'Partner' end as dispatched_account_type    
+    case when receiveraccount.account_name like '%Goonj%' then 'Self' else 'Partner' end as receiver_account_type    
 
 FROM {{ ref('staging_dispatch_status') }} ds 
 left join 

@@ -22,7 +22,7 @@ select
     activity_type,
     activity_category,
     activity_sub_type,
-    objective_of_cfw_work
+    objective_of_cfw_work,
     number_of_activities,
     activity_id,
     num_cfw_female,

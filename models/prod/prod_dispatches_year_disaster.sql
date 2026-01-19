@@ -13,8 +13,8 @@ state,
 district,
 disaster_type,
 kit_type,
-count(distinct case dispatched_account_type when 'Self' then dispatch_id else null end) as num_self_dispatches,
-count(distinct case dispatched_account_type when 'Partner' then dispatch_id else null end) as num_external_dispatches,
+count(distinct case receiver_account_type when 'Self' then dispatch_id else null end) as num_self_dispatches,
+count(distinct case receiver_account_type when 'Partner' then dispatch_id else null end) as num_external_dispatches,
 sum(quantity) as kit_count,
 count(distinct dispatch_id) as total_dispatches
 from 
