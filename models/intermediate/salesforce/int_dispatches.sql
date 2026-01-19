@@ -49,6 +49,9 @@ SELECT
     dli.others_ration,
     dli.others_general,
     
+    dpv.status as status,
+    dpv.dispatch_stage as dispatch_stage,
+
     kit.kit_type,
     kit.kit_sub_type,
     
@@ -74,7 +77,7 @@ SELECT
     receiveraccount.account_type as receiver_center_type,
     receiveraccount.state as receiver_state,
     receiveraccount.district as receiver_district,
-    case when receiveraccount.account_name like '%Goonj%' then 'Self' else 'Partner' end as dispatched_account_type    
+    case when receiveraccount.account_name like '%Goonj%' then 'Self' else 'Partner' end as receiver_account_type    
 
 FROM {{ ref('staging_dispatch_status') }} ds 
 left join 
@@ -87,4 +90,6 @@ left join
 {{ref('staging_kit')}} kit on dli.kit_id = kit.kit_id
 left join
 {{ref('staging_relief_requirement')}} d on ds.demand_id = d.demand_id
+left join
+{{ref('staging_demand_post_validation')}} dpv on ds.demand_post_validation_id = dpv.demand_post_validation_id
 where ds.is_deleted=False and dli.is_deleted=False
