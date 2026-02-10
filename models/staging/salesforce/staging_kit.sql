@@ -29,3 +29,6 @@ SELECT
     "Processing_Center__c" AS processing_center,
     "Number_of_People_Involved__c" AS number_of_people_involved
 FROM {{ source('staging_salesforce', 'kit') }}
+WHERE
+    -- Don't include deleted records
+       "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False

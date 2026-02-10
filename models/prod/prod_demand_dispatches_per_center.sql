@@ -5,7 +5,7 @@
 
 
 
-select
+select distinct
 demands.annual_year,
 dispatches.receiver_center_name,
 demands.disaster_type,

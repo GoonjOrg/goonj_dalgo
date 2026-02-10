@@ -4,7 +4,7 @@
 ) }}
 
 
-SELECT
+SELECT distinct
     distributions.annual_year,
     distributions.disaster_type,
     sum(case when kit_type in ('CFW','DFW') then  quantity else 0 end) as cfw_kit_count,

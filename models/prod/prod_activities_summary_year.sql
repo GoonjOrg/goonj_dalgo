@@ -3,7 +3,7 @@
     tags=['activities_summary_year', 'prod', 'salesforce']
 ) }}
 
-select 
+select distinct
     annual_year,
     state,
     district,

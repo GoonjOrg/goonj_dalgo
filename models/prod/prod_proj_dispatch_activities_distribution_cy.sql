@@ -1,7 +1,35 @@
 {{ config(
     materialized='table',
-    tags=['activities_distribution', 'prod', 'salesforce']
+    tags=['proj_dispatch_activities_distribution_cy', 'prod', 'salesforce']
 ) }}
+
+
+WITH current_fy AS (
+    SELECT 
+        CASE 
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 
+            THEN EXTRACT(YEAR FROM CURRENT_DATE)::text || '-' || RIGHT((EXTRACT(YEAR FROM CURRENT_DATE) + 1)::text, 2)
+            ELSE (EXTRACT(YEAR FROM CURRENT_DATE) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM CURRENT_DATE)::text, 2)
+        END AS current_financial_year
+),
+
+--For the project
+filtered_distributions AS (
+    SELECT * FROM {{ ref('int_distributions') }}
+    WHERE kit_type IS NOT NULL 
+       OR material_type IS NOT NULL
+),
+
+
+filtered_dispatches AS (
+    SELECT * FROM {{ ref('int_dispatches') }} dispatches
+    cross join current_fy cfy
+    WHERE 
+    dispatches.annual_year=cfy.current_financial_year AND
+    dispatches.internal_demand != 'Internal'
+     
+)
+
 
 select distinct
     a.annual_year,
@@ -54,11 +82,11 @@ select distinct
     d.disaster_type,
     d.type_of_initiative as distribution_type_of_initiative,
     d.distribution_line_name,
-    --dispatches.dispatch_name,
-    --dispatches.dispatch_id,
-    --dispatches.dispatch_date,
-    --dispatches.dispatch_line_item_id,
-    --dispatches.dispatch_line_item_name,
+    dispatches.dispatch_name,
+    dispatches.dispatch_id,
+    dispatches.dispatch_date,
+    dispatches.dispatch_line_item_id,
+    dispatches.dispatch_line_item_name,
     d.implementation_inventory_name,
     d.source_of_material,
     d.bill_name,
@@ -69,12 +97,15 @@ select distinct
     d.other_material_name,
     d.purchase_kit_name,
     d.quantity,
+    d.distribution_activity_name,
+    d.distribution_activity_id,
     d.created_by as distribution_created_by,
     d.created_date as distribution_created_date
 from 
-{{ ref('int_activities') }} a 
-LEFT JOIN {{ref('int_distributions')}} d 
-    ON  a.activity_id=d.activity_id
---LEFT JOIN{{ ref('int_dispatches') }} dispatches 
---on d.dispatch_line_item_id = dispatches.dispatch_line_item_id
+    filtered_dispatches as dispatches left join
+    filtered_distributions as d
+    on d.dispatch_line_item_id = dispatches.dispatch_line_item_id
+    left join
+    {{ ref('int_activities') }} a 
+   on a.activity_id=d.activity_id
 

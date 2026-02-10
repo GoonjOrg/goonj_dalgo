@@ -4,7 +4,7 @@
 ) }}
 
 
-SELECT
+SELECT distinct
     annual_year,
     quarter,
     state,

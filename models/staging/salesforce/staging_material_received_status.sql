@@ -20,7 +20,7 @@ SELECT
     "LastModifiedById" AS last_modified_by_id,
     "LastModifiedDate" AS last_modified_date,
     "Received_Date__c" AS received_date,
-    "Dispatch_Status__c" AS dispatch_status,
+    "Dispatch_Status__c" AS dispatch_id,
     "Is_Partial_Received__c" AS is_partial_received,
     "Is_Created_from_Avni__c" AS is_created_from_avni,
 
@@ -33,14 +33,4 @@ FROM {{ source('staging_salesforce', 'material_received_status') }}
 
 WHERE
     -- Don't include deleted records
-    "IsDeleted" = FALSE
-    
-    -- Make sure we have the basic information we need
-    AND "Id" IS NOT NULL
-    AND "CreatedDate" IS NOT NULL
-    
-    -- Don't include completely empty or invalid records
-    AND "Name" IS NOT NULL
-    AND "Name" != ''
-
-ORDER BY "CreatedDate" DESC, "Id"
+       "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False

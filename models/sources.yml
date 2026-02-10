@@ -88,6 +88,11 @@ sources:
         identifier: Relief_Requirement__c
         description: <table_description>
 
+      - name: users
+        identifier: User
+        description: <table_description>
+ 
+
   - name: staging_avni
     schema: staging_avni
     tables:

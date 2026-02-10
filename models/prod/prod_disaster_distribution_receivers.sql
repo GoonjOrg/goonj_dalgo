@@ -18,7 +18,7 @@ other_village,
 tola_mohalla,
 disaster_type,
 distribution_name,
-date_of_distribution,
+distribution_date,
 type_of_community,
 type_of_initiative,
 account_name,
@@ -39,7 +39,7 @@ max(case when kit_type is null then quantity else null end) as num_other_materia
 FROM 
 {{ ref('int_distributions') }} as distributions 
 where is_deleted=False and disaster_type != 'None'
-group by annual_year, quarter, month, monthnum, state, district, block, other_block, village, other_village, tola_mohalla, disaster_type, distribution_name, date_of_distribution, type_of_community, type_of_initiative, account_name, distributor_account_type, school_name, school_type, is_rahat, no_of_families_reached, no_of_individuals_reached, is_created_from_avni
+group by annual_year, quarter, month, monthnum, state, district, block, other_block, village, other_village, tola_mohalla, disaster_type, distribution_name, distribution_date, type_of_community, type_of_initiative, account_name, distributor_account_type, school_name, school_type, is_rahat, no_of_families_reached, no_of_individuals_reached, is_created_from_avni
 
 
 

@@ -8,9 +8,9 @@ with year_geography as(
 select 
     distinct 
     CASE 
-        WHEN EXTRACT(MONTH FROM date_of_distribution) >= 4 
-            THEN EXTRACT(YEAR FROM date_of_distribution)::text || '-' || RIGHT((EXTRACT(YEAR FROM date_of_distribution) + 1)::text, 2)
-        ELSE (EXTRACT(YEAR FROM date_of_distribution) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM date_of_distribution)::text, 2)
+        WHEN EXTRACT(MONTH FROM distribution_date) >= 4 
+            THEN EXTRACT(YEAR FROM distribution_date)::text || '-' || RIGHT((EXTRACT(YEAR FROM distribution_date) + 1)::text, 2)
+        ELSE (EXTRACT(YEAR FROM distribution_date) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM distribution_date)::text, 2)
     END AS annual_year,
     state,
     district,
@@ -27,7 +27,7 @@ group by annual_year,state,district,block,village,other_block,other_village
 
 new_states as (
     -- States appearing for the first time in each year
-    select 
+    select distinct
         yg.annual_year,
         yg.state
     from year_geography yg
@@ -41,7 +41,7 @@ new_states as (
 
 new_districts as (
     -- Districts appearing for the first time in each year
-    select 
+    select distinct
         yg.annual_year,
         yg.state,
         yg.district
@@ -55,7 +55,7 @@ new_districts as (
     )
 )
 
-select 
+select distinct
         yg.annual_year,
         yg.state,
         yg.district,

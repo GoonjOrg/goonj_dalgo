@@ -55,10 +55,4 @@ FROM {{ source('staging_salesforce', 'dispatch_status') }}
 
 WHERE
     -- Don't include deleted records
-    "IsDeleted" = FALSE
-    
-    -- Make sure we have the basic information we need
-    AND "Id" IS NOT NULL
-    AND "CreatedDate" IS NOT NULL
-
-ORDER BY "CreatedDate" DESC, "Id"
+       "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False

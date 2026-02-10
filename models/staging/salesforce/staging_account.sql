@@ -66,14 +66,6 @@ FROM {{ source('staging_salesforce', 'account') }}
 
 WHERE
     -- Don't include deleted records
-    "IsDeleted" = FALSE
-    
-    -- Make sure we have the basic information we need
-    AND "Id" IS NOT NULL
-    AND "CreatedDate" IS NOT NULL
-    
-    -- Don't include completely empty or invalid records
-    AND "Name" IS NOT NULL
-    AND "Name" != ''
+       "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False
 
 ORDER BY "CreatedDate" DESC, "Id"

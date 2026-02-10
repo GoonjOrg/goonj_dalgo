@@ -5,7 +5,7 @@
 
 
 
-select
+select distinct
 annual_year,
 quarter,
 month,

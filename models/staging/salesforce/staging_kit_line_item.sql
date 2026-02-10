@@ -24,17 +24,11 @@ SELECT
     "Unit__c" AS unit,
     "Quantity__c" AS quantity,
     "Contributed_Item__c" AS contributed_item,
-    "Implementation_Inventory__c" AS implementation_inventory,
-    "Purchase_High_Value_Material__c" AS purchase_high_value_material
+    "Implementation_Inventory__c" AS implementation_inventory_id,
+    "Purchase_High_Value_Material__c" AS material_inventory_id
 
 FROM {{ source('staging_salesforce', 'kit_line_item') }}
 
 WHERE
     -- Don't include deleted records
-    "IsDeleted" = FALSE
-    
-    -- Make sure we have the basic information we need
-    AND "Id" IS NOT NULL
-    AND "CreatedDate" IS NOT NULL
-
-ORDER BY "CreatedDate" DESC, "Id"
+       "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False

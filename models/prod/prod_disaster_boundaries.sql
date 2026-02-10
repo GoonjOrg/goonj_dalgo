@@ -17,7 +17,7 @@ village,
 other_village,
 disaster_type,
 type_of_initiative,
-date_of_distribution,
+distribution_date,
 distribution_name
 FROM 
 {{ ref('int_distributions') }} as distributions 
