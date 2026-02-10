@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    tags=['dispatches_info', 'prod', 'salesforce']
+    tags=['dispatches_cy', 'prod', 'salesforce']
 ) }}
 
 
@@ -61,6 +61,18 @@ FROM
 
 ),
 
+
+
+current_fy AS (
+    SELECT 
+        CASE 
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 
+            THEN EXTRACT(YEAR FROM CURRENT_DATE)::text || '-' || RIGHT((EXTRACT(YEAR FROM CURRENT_DATE) + 1)::text, 2)
+            ELSE (EXTRACT(YEAR FROM CURRENT_DATE) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM CURRENT_DATE)::text, 2)
+        END AS current_financial_year
+),
+
+
 yearly_totals AS (
     SELECT 
         annual_year,
@@ -108,3 +120,5 @@ LEFT JOIN yearly_totals yt ON b.annual_year = yt.annual_year
 LEFT JOIN quarterly_totals qt ON b.annual_year = qt.annual_year AND b.quarter = qt.quarter
 LEFT JOIN yearly_state_totals yst ON b.annual_year = yst.annual_year AND b.state = yst.state
 LEFT JOIN quarterly_state_totals qst ON b.annual_year = qst.annual_year AND b.quarter = qst.quarter AND b.state = qst.state
+CROSS JOIN current_fy cfy
+where b.annual_year=cfy.current_financial_year

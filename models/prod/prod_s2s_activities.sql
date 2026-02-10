@@ -3,7 +3,7 @@
     tags=['s2s_activities', 'prod', 'salesforce']
 ) }}
 
-select 
+select distinct
     annual_year,
     month,
     monthnum,

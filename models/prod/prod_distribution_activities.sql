@@ -3,7 +3,7 @@
     tags=['distribution_activities', 'prod', 'salesforce']
 ) }}
 
-select 
+select distinct
     d.annual_year,
     d.month,
     d.monthnum,
@@ -16,7 +16,7 @@ select
     d.created_by,
     d.created_date,
     distribution_id,
-    date_of_distribution,
+    distribution_date,
     source_of_material,
     bill_name,
     kit_type,

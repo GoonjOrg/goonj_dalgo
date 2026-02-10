@@ -27,7 +27,7 @@ SELECT
     "Tola_Mohalla__c" AS tola_mohalla,
     
     -- Basic details
-    "Date_Of_Distribution__c" AS date_of_distribution,
+    "Date_Of_Distribution__c" AS distribution_date,
     "Type_of_Initiative__c" AS type_of_initiative,
     "Name_of_Account__c" AS account_name,
     "Type_of_Community__c" AS type_of_community,
@@ -81,7 +81,5 @@ SELECT
     "_airbyte_extracted_at",
     "_airbyte_meta"
 FROM {{ source('staging_salesforce', 'distribution') }}
-WHERE "Date_Of_Distribution__c" >= '2021-04-01'
-    AND "Date_Of_Distribution__c" IS NOT NULL 
-       
-
+WHERE 
+        "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False

@@ -45,14 +45,5 @@ FROM {{ source('staging_salesforce', 'demand_post_validation') }}
 
 WHERE
     -- Don't include deleted records
-    "IsDeleted" = FALSE
+       "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False
     
-    -- Make sure we have the basic information we need
-    AND "Id" IS NOT NULL
-    AND "CreatedDate" IS NOT NULL
-    
-    -- Don't include completely empty or invalid records
-    AND "Name" IS NOT NULL
-    AND "Name" != ''
-
-ORDER BY "CreatedDate" DESC, "Id"

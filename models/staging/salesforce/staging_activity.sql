@@ -22,8 +22,8 @@ SELECT
     "Name" as activity_name,                                  -- What the activity is called
     "Name_of_Account__c" AS account_name,    -- Associated account name
     "Type_of_Initiative__c" AS type_of_initiative,                 -- What kind of initiative
-    "Activity_End_Date__c" AS activity_start_date,
-    "Activity_Start_Date__c" AS activity_end_date,
+    "Activity_End_Date__c" AS activity_end_date,
+    "Activity_Start_Date__c" AS activity_start_date,
     "School_Aanganwadi_Learning_Center_Name__c" as school_name,
 
     
@@ -59,6 +59,7 @@ SELECT
     "Activity_Sub_Type__c" AS activity_sub_type,  
     "Other_Sub_Type__c" AS other_sub_type,                
     "Objective_of_DFW_work__c" AS objective_of_cfw_work,             -- Development Field Worker objective
+    "Other_Objective__c" AS other_objective,
     "Target_Community__c" AS target_community,
     "Number_of_Activities__c" as number_of_activities,               -- How many smaller activities
     "Measurement_Type__c" AS measurement_type,    
@@ -108,12 +109,4 @@ FROM {{ source('staging_salesforce', 'activity') }}
 -- This is like checking that papers aren't torn or missing important information
 WHERE
     -- Don't include deleted records (like not counting torn-up papers)
-    "IsDeleted" = FALSE
-
-    -- Make sure we have the basic information we need
-    AND "Id" IS NOT NULL
-    AND "CreatedDate" IS NOT NULL
-
-    -- Don't include completely empty or invalid records
-    AND "Name" IS NOT NULL
-    AND "Name" != ''
+   "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False

@@ -28,3 +28,6 @@ SELECT
     "_airbyte_extracted_at",
     "_airbyte_meta"
 FROM {{ source('staging_salesforce', 'distribution_line') }}
+WHERE
+    -- Don't include deleted records
+       "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False

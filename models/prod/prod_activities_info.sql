@@ -3,11 +3,11 @@
     tags=['activities_info', 'prod', 'salesforce']
 ) }}
 
-select 
+select
     annual_year,
+    quarter,
     month,
     monthnum,
-    quarter,
     state,
     activity_start_date,
     activity_end_date,
@@ -22,12 +22,21 @@ select
     activity_type,
     activity_category,
     activity_sub_type,
+    other_sub_type,
     objective_of_cfw_work,
+    other_objective,
     number_of_activities,
     activity_id,
+    activity_name,
     num_cfw_female,
     num_cfw_male,
     num_cfw_others,
+    measurement_type,
+    length,
+    breadth,
+    numbers,
+    diameter,
+    depth_height,
     num_working_days,
     num_njpc_female,
     num_njpc_male,
@@ -37,6 +46,13 @@ select
     num_s2s_days,
     actvity_conducted_with_students,
     school_name,
-    is_education_and_health
+    is_education_and_health,
+    is_created_from_avni,
+    created_date,
+    created_date-activity_end_date as date_diff,
+    last_modified_date,
+    created_by,
+    new_created_by,
+    last_modified_by_id
 from 
 {{ ref('int_activities') }}
