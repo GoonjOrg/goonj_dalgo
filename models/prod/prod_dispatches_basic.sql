@@ -25,6 +25,7 @@ WITH base AS (
     dispatch_name,
     dispatch_date,
     demand_id,
+    demand_name,
     demand_post_validation_id,
     dpv_status,
     dispatch_stage,

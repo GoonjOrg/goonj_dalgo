@@ -7,10 +7,10 @@
 WITH base AS (
 
 select distinct
-annual_year,
-quarter,
-monthnum,
-month,
+annual_year as dispatch_year,
+quarter as dispatch_quarter,
+monthnum as dispatch_monthnum,
+month as dispatch_month,
 state,
 district,
 block,
@@ -28,6 +28,7 @@ dispatch_id,
 dispatch_name,
 dispatch_date,
 demand_id,
+demand_name,
 demand_post_validation_id,
 dpv_status,
 dispatch_stage,
@@ -37,6 +38,7 @@ remarks,
 dispatch_line_item_id,
 dispatch_line_item_name,
 kit_id,
+kit_name,
 quantity,
 unit,
 material_code,
@@ -75,38 +77,38 @@ current_fy AS (
 
 yearly_totals AS (
     SELECT 
-        annual_year,
+        dispatch_year,
         COUNT(DISTINCT dispatch_id) AS total_dispatches_year
     FROM base
-    GROUP BY annual_year
+    GROUP BY dispatch_year
 ),
 
 quarterly_totals AS (
     SELECT 
-        annual_year,
-        quarter,
+        dispatch_year  ,
+        dispatch_quarter,
         COUNT(DISTINCT dispatch_id) AS total_dispatches_quarter
     FROM base
-    GROUP BY annual_year, quarter
+    GROUP BY dispatch_year, dispatch_quarter
 ),
 
 yearly_state_totals AS (
     SELECT 
-        annual_year,
+        dispatch_year,
         state,
         COUNT(DISTINCT dispatch_id) AS total_dispatches_year_state
     FROM base
-    GROUP BY annual_year, state
+    GROUP BY dispatch_year, state
 ),
 
 quarterly_state_totals AS (
     SELECT 
-        annual_year,
-        quarter,
+        dispatch_year,
+        dispatch_quarter,
         state,
         COUNT(DISTINCT dispatch_id) AS total_dispatches_quarter_state
     FROM base
-    GROUP BY annual_year, quarter, state
+    GROUP BY dispatch_year, dispatch_quarter, state
 )
 
 SELECT 
@@ -116,9 +118,9 @@ SELECT
     yst.total_dispatches_year_state,
     qst.total_dispatches_quarter_state
 FROM base b
-LEFT JOIN yearly_totals yt ON b.annual_year = yt.annual_year
-LEFT JOIN quarterly_totals qt ON b.annual_year = qt.annual_year AND b.quarter = qt.quarter
-LEFT JOIN yearly_state_totals yst ON b.annual_year = yst.annual_year AND b.state = yst.state
-LEFT JOIN quarterly_state_totals qst ON b.annual_year = qst.annual_year AND b.quarter = qst.quarter AND b.state = qst.state
+LEFT JOIN yearly_totals yt ON b.dispatch_year = yt.dispatch_year
+LEFT JOIN quarterly_totals qt ON b.dispatch_year = qt.dispatch_year AND b.dispatch_quarter = qt.dispatch_quarter
+LEFT JOIN yearly_state_totals yst ON b.dispatch_year = yst.dispatch_year AND b.state = yst.state
+LEFT JOIN quarterly_state_totals qst ON b.dispatch_year = qst.dispatch_year AND b.dispatch_quarter = qst.dispatch_quarter AND b.state = qst.state
 CROSS JOIN current_fy cfy
-where b.annual_year=cfy.current_financial_year
+where b.dispatch_year=cfy.current_financial_year
