@@ -49,7 +49,7 @@ SELECT
     dcd.name_of_the_org as account_id,
     dcd.from_which_processing_center as processing_center,
     CASE dcd.internal_demand WHEN 'Yes' THEN 'Internal' ELSE 'External' END as internal_demand,
-    CASE dcd.is_local_demand WHEN 'Yes' THEN 'Local' ELSE 'Non-Local' END as is_local_demand,
+    CASE dcd.is_local_demand WHEN 'Yes' THEN 'Local' ELSE 'Non-Local' END as local_demand,
     
     -- Demand validation information
     dv.status as validation_status,

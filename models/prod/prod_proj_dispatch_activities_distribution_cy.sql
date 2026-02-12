@@ -32,10 +32,10 @@ filtered_dispatches AS (
 
 
 select distinct
-    a.annual_year,
-    a.month,
-    a.monthnum,
-    a.quarter,
+    a.annual_year activity_year,
+    a.month activity_month,
+    a.monthnum activity_monthnum,
+    a.quarter acivity_quarter,
     a.state,
     a.district,
     a.block,
@@ -79,12 +79,20 @@ select distinct
     distribution_id,
     distribution_name,
     distribution_date,
+    d.annual_year as distribution_year,
+    d.quarter as distribution_quarter,
+    d.month as distribution_month,
+    d.monthnum as distribution_monthnum,
     d.disaster_type,
     d.type_of_initiative as distribution_type_of_initiative,
     d.distribution_line_name,
     dispatches.dispatch_name,
     dispatches.dispatch_id,
     dispatches.dispatch_date,
+    dispatches.annual_year as dispatch_year,
+    dispatches.quarter as dispatch_quarter,
+    dispatches.month as dispatch_month,
+    dispatches.monthnum as dispatch_monthnum,
     dispatches.dispatch_line_item_id,
     dispatches.dispatch_line_item_name,
     d.implementation_inventory_name,
@@ -108,4 +116,5 @@ from
     left join
     {{ ref('int_activities') }} a 
    on a.activity_id=d.activity_id
+
 

@@ -41,7 +41,6 @@ SELECT DISTINCT
     df.street,
     df.address_id,
     df.goonj_office,
-    df.from_which_processing_center,
     df.transporter,
     df.transporter_consignment_no,
     df.vehicle_number,
@@ -49,11 +48,12 @@ SELECT DISTINCT
     df.e_waybill_number,
     df.total_no_of_bags_packages,
     df.loading_and_truck_images_link,
-    df.name_of_poc,
+    df.name_of_poc, 
     df.demand_id,
+    d.demand_name,
     df.demand_post_validation_id,
-    CASE WHEN df.internal_demand='Yes' THEN 'Internal' ELSE 'External' END as internal_demand,
-    CASE WHEN df.local_demand='Yes' THEN 'Local' ELSE 'Non-Local' END as local_demand,
+    d.internal_demand,
+    d.local_demand,
     df.receiving_account_id,
     df.rate,
     df.remarks,
@@ -103,6 +103,7 @@ SELECT DISTINCT
     mi.other as othermaterial,
 
     -- Kit Info
+    kit.kit_name,
     kit.kit_type,
     kit.kit_sub_type,
 
@@ -115,7 +116,7 @@ SELECT DISTINCT
 
 FROM dispatches_calculated_dates df
 LEFT JOIN {{ ref('int_demands') }} d ON df.demand_id = d.demand_id
-LEFT JOIN {{ ref('staging_account') }} sender ON df.from_which_processing_center = sender.account_name
+LEFT JOIN {{ ref('staging_account') }} sender ON d.assigned_processing_center = sender.account_id
 LEFT JOIN {{ ref('staging_account') }} receiver ON df.receiving_account_id = receiver.account_id
 LEFT JOIN {{ ref('staging_dispatch_line_items') }} dli ON df.dispatch_id = dli.dispatch_status
 LEFT JOIN {{ ref('staging_kit') }} kit ON dli.kit_id = kit.kit_id
