@@ -92,6 +92,9 @@ sources:
         identifier: User
         description: <table_description>
  
+      - name: fvr
+        identifier: Consecutive_FVR__c 
+        description: <table_description>
 
   - name: staging_avni
     schema: staging_avni

@@ -3,8 +3,17 @@
     tags=['dispatches_cy', 'prod', 'salesforce']
 ) }}
 
+WITH 
 
-WITH base AS (
+current_fy AS (
+    SELECT 
+        CASE 
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 
+            THEN EXTRACT(YEAR FROM CURRENT_DATE)::text || '-' || RIGHT((EXTRACT(YEAR FROM CURRENT_DATE) + 1)::text, 2)
+            ELSE (EXTRACT(YEAR FROM CURRENT_DATE) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM CURRENT_DATE)::text, 2)
+        END AS current_financial_year
+)
+
 
 select distinct
 annual_year as dispatch_year,
@@ -37,90 +46,47 @@ internal_demand,
 remarks,
 dispatch_line_item_id,
 dispatch_line_item_name,
-kit_id,
-kit_name,
-quantity,
-unit,
-material_code,
-material_type,
-material_content,
-contributed_item,
-others,
-others_ration,
-others_general,
-kit_type,
-kit_sub_type,
-type_of_material,
-material_inventory_name,
-item_category,
-item_sub_category,
-bulk_material,
-dump_material,
-othermaterial
+dispatches.kit_id,
+dispatches.kit_name,
+dispatches.quantity,
+dispatches.unit,
+dispatches.material_code,
+dispatches.material_type,
+dispatches.material_content,
+dispatches.contributed_item,
+dispatches.others,
+dispatches.others_ration,
+dispatches.others_general,
+dispatches.kit_type,
+dispatches.kit_sub_type,
+dispatches.type_of_material,
+dispatches.material_inventory_name,
+dispatches.item_category,
+dispatches.item_sub_category,
+dispatches.bulk_material,
+dispatches.dump_material,
+dispatches.othermaterial,
+dispatches.truck_vehicle_capacity,
+dispatches.total_no_of_bags_packages,
+dispatches.transporter_consignment_no,
+dispatches.transporter,
+
+kit.kit_line_item_name,
+kit.line_item_quantity as kit_line_quantity,
+kit.material_inventory_name as kit_line_material_inventory_name,
+kit.item_name as kit_line_items_name,
+kit.item_category as kit_line_item_category,
+kit.item_sub_category as kit_line_item_sub_category,
+kit.type_of_material as kit_line_type_of_material,
+
+case when kit.line_item_quantity is null then dispatches.quantity else kit.line_item_quantity*dispatches.quantity end as item_quantity    
 
 FROM 
 {{ ref('int_dispatches') }} as dispatches 
-
-),
-
-
-
-current_fy AS (
-    SELECT 
-        CASE 
-            WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 
-            THEN EXTRACT(YEAR FROM CURRENT_DATE)::text || '-' || RIGHT((EXTRACT(YEAR FROM CURRENT_DATE) + 1)::text, 2)
-            ELSE (EXTRACT(YEAR FROM CURRENT_DATE) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM CURRENT_DATE)::text, 2)
-        END AS current_financial_year
-),
-
-
-yearly_totals AS (
-    SELECT 
-        dispatch_year,
-        COUNT(DISTINCT dispatch_id) AS total_dispatches_year
-    FROM base
-    GROUP BY dispatch_year
-),
-
-quarterly_totals AS (
-    SELECT 
-        dispatch_year  ,
-        dispatch_quarter,
-        COUNT(DISTINCT dispatch_id) AS total_dispatches_quarter
-    FROM base
-    GROUP BY dispatch_year, dispatch_quarter
-),
-
-yearly_state_totals AS (
-    SELECT 
-        dispatch_year,
-        state,
-        COUNT(DISTINCT dispatch_id) AS total_dispatches_year_state
-    FROM base
-    GROUP BY dispatch_year, state
-),
-
-quarterly_state_totals AS (
-    SELECT 
-        dispatch_year,
-        dispatch_quarter,
-        state,
-        COUNT(DISTINCT dispatch_id) AS total_dispatches_quarter_state
-    FROM base
-    GROUP BY dispatch_year, dispatch_quarter, state
-)
-
-SELECT 
-    b.*,
-    yt.total_dispatches_year,
-    qt.total_dispatches_quarter,
-    yst.total_dispatches_year_state,
-    qst.total_dispatches_quarter_state
-FROM base b
-LEFT JOIN yearly_totals yt ON b.dispatch_year = yt.dispatch_year
-LEFT JOIN quarterly_totals qt ON b.dispatch_year = qt.dispatch_year AND b.dispatch_quarter = qt.dispatch_quarter
-LEFT JOIN yearly_state_totals yst ON b.dispatch_year = yst.dispatch_year AND b.state = yst.state
-LEFT JOIN quarterly_state_totals qst ON b.dispatch_year = qst.dispatch_year AND b.dispatch_quarter = qst.dispatch_quarter AND b.state = qst.state
-CROSS JOIN current_fy cfy
-where b.dispatch_year=cfy.current_financial_year
+left join {{ ref('int_kit')}} as kit
+    on dispatches.kit_id = kit.kit_id
+cross join current_fy cfy
+where kit.contributed_item is null
+and kit.type_of_material !='Contributed_Track'
+and kit.item_category !='Admin Material'
+and dispatches.annual_year=cfy.current_financial_year

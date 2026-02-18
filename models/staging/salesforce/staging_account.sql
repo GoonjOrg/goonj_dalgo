@@ -8,6 +8,7 @@ SELECT
     -- Basic system information
     "Id" AS account_id,
     "Name" AS account_name,
+    "Account_Code__c" AS account_code,
     "State__c" AS state,
     "District__c" AS district,
     "Block__c" AS block,
@@ -52,6 +53,21 @@ SELECT
     "Description" AS description,
     "Rating" AS rating,
 
+    --For Sanjha Partners
+    --"Partnership_type__c" as partnership_type,
+    "Are_you_a_Member_of_Registered_With__c" as registered_with,
+    "Contacted_Date__c" as contacted_date,
+    "Date_of_Registration__c" as date_of_registration,
+    "Date_of_Visit__c" as date_of_visit,
+    "Description_of_Scope_of_Work__c" as description_of_scope_of_work,
+    "Details_of_current_and_past_funding__c" as funding_information,
+    "FCRA__c" AS has_fcra,
+    "Last_FVR_Notified__c" AS last_fvr_notified,
+    "Last_OPF_Notified__c" AS last_opf_notified,
+    "Onboard_Stage__c" AS onboard_stage,
+    --"Partnership_type__c" as partnership_type,
+
+
     -- Custom fields (common in Salesforce) - commented out if not available
     -- "Account_Status__c" AS account_status,
     -- "Organization_Type__c" AS organization_type,
@@ -67,5 +83,7 @@ FROM {{ source('staging_salesforce', 'account') }}
 WHERE
     -- Don't include deleted records
        "IsDeleted" = FALSE or "IsDeleted" = false or "IsDeleted" = False
+       AND "Type" !='Household'
+
 
 ORDER BY "CreatedDate" DESC, "Id"

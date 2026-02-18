@@ -112,7 +112,13 @@ SELECT
     i.current_quantity,
     da.activity as activity_id,
     da.distribution_activity_name,
-    da.distribution_activity_id
+    da.distribution_activity_id,
+    case when dcd.village !='Other' then 
+        concat(dcd.state,'_',dcd.district,'_',dcd.block,'_',dcd.village) 
+    end as geo_village,
+    case when dcd.village ='Other' then 
+        concat(dcd.state,'_',dcd.district,'_',dcd.block,'_',dcd.other_block,'_',dcd.other_village)
+    end as geo_othervillage
 
 FROM distribution_calculated_dates dcd  
 LEFT JOIN {{ ref('staging_distribution_line') }} dl 
