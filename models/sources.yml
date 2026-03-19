@@ -106,3 +106,10 @@ sources:
       - name: subjects
         identifier: subjects
         description: <table_description>
+
+  - name: staging_sheets
+    schema: staging_sheets
+    tables:
+      - name: state_zones
+        identifier: StateZone
+        description: <table_description>
