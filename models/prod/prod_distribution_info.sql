@@ -40,7 +40,7 @@ distributions.sub_type,
 distributions.material_type,
 distributions.material_sub_category,
 other_material_name,
-distributions.purchase_kit_name,
+distributions.purchase_kit_id,
 current_quantity,
 is_created_from_avni,
 
@@ -68,7 +68,9 @@ distributions.last_modified_by_id,
 distributions.remarks as distributionremarks,
 distribution_photos,
 receiver_photos,
-disclaimer_photos
+disclaimer_photos,
+geo_othervillage,
+geo_village
 
 FROM 
 {{ ref('int_distributions') }} as distributions 

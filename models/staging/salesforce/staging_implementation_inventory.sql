@@ -37,7 +37,7 @@ SELECT
     "Date_of_receiving__c" AS date_of_receiving,
     "Material_Kit_Name__c" AS material_kit_name,
     "Original_Quantity__c" AS original_quantity,
-    "Purchase_kit_name__c" AS purchase_kit_name,
+    "Purchase_kit_name__c" AS purchase_kit_id,
     "From_which_account__c" AS from_which_account,
     "Source_of_Material__c" AS source_of_material,
     "Center_Field_Office__c" AS center_field_office,

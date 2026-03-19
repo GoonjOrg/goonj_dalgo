@@ -23,7 +23,8 @@ select distinct
     d.disaster_type,
     d.type_of_initiative as distribution_initiative,
     count(d.distribution_id) as num_distributions,
-    sum(d.quantity) 
+    sum(case when d.kit_type is not null then d.quantity else 0 end) as num_kit_distributed, 
+    sum(case when d.kit_type is null then d.quantity else 0 end) as num_nonkit_distributed 
 
 from 
 {{ ref('int_activities') }} a full outer join {{ ref('int_distributions') }} d on a.annual_year=d.annual_year and a.month=d.month and a.monthnum=d.monthnum and a.quarter=d.quarter and a.state=d.state and a.district=d.district and a.block=d.block and a.village=d.village and a.other_block=d.other_block and a.other_village=d.other_village

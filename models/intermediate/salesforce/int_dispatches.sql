@@ -65,19 +65,23 @@ SELECT DISTINCT
     df.m_num as monthnum,
 
     d.disaster_type,
-    d.post_validation_status as dpv_status,
+    d.dpv_status,
     d.dispatch_stage as dispatch_stage,
 
     -- Account Info
-    sender.account_name as processing_center_name,
-    sender.account_type as processing_center_type,
-    sender.state as processing_state,
-    sender.district as procssing_district,
-    receiver.account_name as receiver_center_name,
-    receiver.account_type as receiver_center_type,
-    receiver.state as receiver_state,
-    receiver.district as receiver_district,
-    CASE WHEN receiver.account_name LIKE '%Goonj%' THEN 'Self' ELSE 'Partner' END AS receiver_account_type,
+    d.processing_center_name,
+    d.processing_center_type,
+    d.sender_center_id,
+    d.processing_state,
+    sz_processing.zone as processing_zone,
+    d.processing_district,
+    d.receiver_center_name,
+    d.receiver_center_type,
+    d.receiver_center_id,
+    d.receiver_state,
+    sz_receiver.zone as receiver_zone,
+    d.receiver_district,
+    d.receiver_account_type,
     
      -- Dispatch line item information
     dli.dispatch_line_item_id,
@@ -116,8 +120,8 @@ SELECT DISTINCT
 
 FROM dispatches_calculated_dates df
 LEFT JOIN {{ ref('int_demands') }} d ON df.demand_id = d.demand_id
-LEFT JOIN {{ ref('staging_account') }} sender ON d.assigned_processing_center = sender.account_id
-LEFT JOIN {{ ref('staging_account') }} receiver ON df.receiving_account_id = receiver.account_id
+--LEFT JOIN {{ ref('staging_account') }} sender ON d.assigned_processing_center = sender.account_id
+--LEFT JOIN {{ ref('staging_account') }} receiver ON df.receiving_account_id = receiver.account_id
 LEFT JOIN {{ ref('staging_dispatch_line_items') }} dli ON df.dispatch_id = dli.dispatch_status
 LEFT JOIN {{ ref('staging_kit') }} kit ON dli.kit_id = kit.kit_id
 LEFT JOIN {{ ref('staging_material_inventory') }} mi ON dli.material_inventory_id = mi.material_inventory_id
@@ -125,3 +129,5 @@ LEFT JOIN {{ ref('staging_material_received_status') }} drs ON df.dispatch_id = 
 LEFT JOIN {{ ref('staging_dispatch_received_status_line_item') }} drsli 
     ON drsli.dispatch_received_status_id = drs.material_received_status_id
     AND drsli.item_name IN (kit.kit_name, dli.contributed_item, mi.material_inventory_name)
+LEFT JOIN {{ ref('staging_statezones') }} sz_processing ON d.processing_state = sz_processing.state
+LEFT JOIN {{ ref('staging_statezones') }} sz_receiver ON d.receiver_state = sz_receiver.state

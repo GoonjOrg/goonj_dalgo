@@ -108,7 +108,7 @@ SELECT
     i.material_type,
     i.material_sub_category,
     i.other_material_name,
-    i.purchase_kit_name,
+    i.purchase_kit_id,
     i.current_quantity,
     da.activity as activity_id,
     da.distribution_activity_name,

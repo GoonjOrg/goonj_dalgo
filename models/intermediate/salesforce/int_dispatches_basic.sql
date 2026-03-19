@@ -11,6 +11,7 @@ WITH base_dates AS (
         TO_CHAR(dispatch_date, 'Mon') as month_name
     FROM {{ ref('staging_dispatch_status') }}
 ),
+
 dispatches_calculated_dates AS (
     SELECT 
         *,
@@ -66,8 +67,8 @@ SELECT DISTINCT
     dcd.m_num as monthnum,
 
     d.disaster_type,
-    d.post_validation_status as dpv_status,
-    d.dispatch_stage as dispatch_stage,
+    d.dpv_status,
+    d.dispatch_stage,
 
     -- Account Info
     sender.account_name as processing_center_name,
