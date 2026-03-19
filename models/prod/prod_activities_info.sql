@@ -44,6 +44,8 @@ select
     num_njpc_days,
     num_s2s_participants,
     num_s2s_days,
+    sum(case type_of_initiative when 'CFW' then num_cfw_female+num_cfw_male+num_cfw_others when 'NJPC' then num_njpc_female+num_njpc_male+num_njpc_others else num_s2s_participants end) as num_total_participants,
+    sum(case type_of_initiative when 'CFW' then num_working_days when 'S2S' then num_s2s_days else 1 end) as num_total_days,
     actvity_conducted_with_students,
     school_name,
     is_education_and_health,
@@ -56,3 +58,4 @@ select
     last_modified_by_id
 from 
 {{ ref('int_activities') }}
+group by annual_year,quarter,month,monthnum,state,activity_start_date,activity_end_date,district,block,village,other_block,other_village,account_name,account_type,type_of_initiative,activity_type,activity_category,activity_sub_type,other_sub_type,objective_of_cfw_work,other_objective,number_of_activities,activity_id,activity_name,num_cfw_female,num_cfw_male,num_cfw_others,measurement_type,length,breadth,numbers,diameter,depth_height,num_working_days,num_njpc_female,num_njpc_male,num_njpc_others,num_njpc_days,num_s2s_participants,num_s2s_days,actvity_conducted_with_students,school_name,is_education_and_health,is_created_from_avni,created_date,last_modified_date,created_by,new_created_by,last_modified_by_id

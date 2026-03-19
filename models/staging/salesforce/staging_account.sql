@@ -65,6 +65,7 @@ SELECT
     "Last_FVR_Notified__c" AS last_fvr_notified,
     "Last_OPF_Notified__c" AS last_opf_notified,
     "Onboard_Stage__c" AS onboard_stage,
+    --"Amount__c" as amount,
     --"Partnership_type__c" as partnership_type,
 
 

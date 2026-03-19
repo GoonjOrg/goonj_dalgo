@@ -25,7 +25,7 @@ filtered_dispatches AS (
     SELECT * FROM {{ ref('int_dispatches') }} dispatches
     CROSS JOIN current_fy cfy
     WHERE dispatches.annual_year=cfy.current_financial_year
-    AND dispatches.internal_demand != 'Internal' 
+    --AND dispatches.internal_demand != 'Internal' 
 )
 
 select distinct
@@ -64,7 +64,7 @@ distributions.sub_type,
 distributions.material_type,
 distributions.material_sub_category,
 other_material_name,
-distributions.purchase_kit_name,
+distributions.purchase_kit_id,
 current_quantity,
 is_created_from_avni,
 
@@ -90,7 +90,7 @@ kit_id,
 processing_center_name,
 processing_center_type,
 processing_state,
-procssing_district,
+processing_district,
 demand_id,
 demand_name,
 demand_post_validation_id,

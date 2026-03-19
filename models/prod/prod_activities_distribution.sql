@@ -67,7 +67,7 @@ select distinct
     d.material_type,
     d.material_sub_category,
     d.other_material_name,
-    d.purchase_kit_name,
+    d.purchase_kit_id,
     d.quantity,
     d.created_by as distribution_created_by,
     d.created_date as distribution_created_date

@@ -21,7 +21,7 @@ implementation_inventory_calculated_fields AS (
             -- Logic: Year - (Year + 1)
             THEN TO_CHAR(date_of_receiving, 'YYYY') || '-' || TO_CHAR(date_of_receiving + interval '1 year', 'YY')
             ELSE TO_CHAR(date_of_receiving - interval '1 year', 'YYYY') || '-' || TO_CHAR(date_of_receiving, 'YY')
-        END as receiving_financial_year,
+        END as receiving_year,
         CASE 
             WHEN m_num BETWEEN 4 AND 6 THEN 'Q1'
             WHEN m_num BETWEEN 7 AND 9 THEN 'Q2'
@@ -35,53 +35,61 @@ SELECT
     -- Basic system information
     implementation_inventory_id,
     implementation_inventory_name,
-    unit,
-    remarks,
-    created_by_id,
-    created_date,
-    last_viewed_date,
-    last_activity_date,
-    last_modified_by_id,
-    last_modified_date,
-    last_referenced_date,
+    ii.unit,
+    ii.remarks,
+    ii.created_by_id,
+    ii.created_date,
+    ii.last_viewed_date,
+    ii.last_activity_date,
+    ii.last_modified_by_id,
+    ii.last_modified_date,
+    ii.last_referenced_date,
     -- Material and kit information
-    material_name,
-    material_type,
-    original_name,
-    kit_type,
-    sub_type,
-    material_sub_category,
-    material_kit_id,
-    material_kit_name,
-    purchase_kit_name,
-    other_material_name,
+    ii.material_name,
+    ii.material_type,
+    ii.original_name,
+    ii.kit_type,
+    ii.sub_type,
+    ii.material_sub_category,
+    ii.material_kit_id as kit_id,
+    kit.kit_name,
+    ii.purchase_kit_id,
+    purchasedkit.kit_name as purchase_kit_name,
+    ii.other_material_name,
     -- Quantity and tracking
-    current_quantity,
-    original_quantity,
-    date_of_receiving,
+    ii.current_quantity,
+    ii.original_quantity,
+    ii.date_of_receiving,
     -- Location and center information
-    center_field_office,
-    center_field_office_state,
-    center_field_office_district,
+    ii.center_field_office,
+    ii.center_field_office_state,
+    ii.center_field_office_district,
     -- Source and account information
-    from_which_account,
-    source_of_material,
-    created_from,
-    created_or_received,
-    purchased_created_received,
+    accounts.account_name,
+    accounts.account_type,
+    ii.from_which_account,
+    ii.source_of_material,
+    ii.created_from,
+    ii.created_or_received,
+    ii.purchased_created_received,
     -- Dispatch information
-    dispatch_id,
-    dispatch_line_item_id,
-    dispatch_received_status,
-    dispatch_received_status_line_item,
+    ii.dispatch_id,
+    ii.dispatch_line_item_id,
+    ii.dispatch_received_status,
+    ii.dispatch_received_status_line_item,
     -- Additional fields
-    bill_name,
-    unique_id,
-    vehicle_type,
+    ii.bill_name,
+    ii.unique_id,
+    ii.vehicle_type,
     -- Optimized Date fields
-    m_num AS receiving_month,
-    y_num AS receiving_year,
-    receiving_month_name,
-    receiving_financial_year,
-    receiving_quarter
-FROM implementation_inventory_calculated_fields
+    ii.m_num AS receiving_monthnum,
+    ii.receiving_month_name,
+    ii.receiving_year,
+    ii.receiving_quarter
+FROM implementation_inventory_calculated_fields ii
+left join {{ ref('staging_account')}} accounts
+on ii.center_field_office = accounts.account_id
+left join {{ ref('staging_kit')}} kit
+on ii.material_kit_id = kit.kit_id
+left join {{ ref('staging_kit')}} purchasedkit
+on ii.purchase_kit_id = purchasedkit.kit_id

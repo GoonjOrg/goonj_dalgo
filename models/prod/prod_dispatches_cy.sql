@@ -12,8 +12,27 @@ current_fy AS (
             THEN EXTRACT(YEAR FROM CURRENT_DATE)::text || '-' || RIGHT((EXTRACT(YEAR FROM CURRENT_DATE) + 1)::text, 2)
             ELSE (EXTRACT(YEAR FROM CURRENT_DATE) - 1)::text || '-' || RIGHT(EXTRACT(YEAR FROM CURRENT_DATE)::text, 2)
         END AS current_financial_year
-)
+),
 
+-- Pre-filter dispatches for current financial year
+filtered_dispatches AS (
+    SELECT *
+    FROM {{ ref('int_dispatches') }}
+    WHERE annual_year = (SELECT current_financial_year FROM current_fy)
+    AND ((item_category IS NULL) OR (item_category != 'Admin Material'))
+    AND contributed_item IS NULL
+    --AND type_of_material != 'Contributed_Track'
+    
+),
+
+-- Pre-filter kits to avoid scanning entire kit table
+filtered_kits AS (
+    SELECT *
+    FROM {{ ref('int_kit') }}
+    WHERE contributed_item IS NULL
+        AND type_of_material != 'Contributed_Track'
+        AND item_category != 'Admin Material'
+)
 
 select distinct
 annual_year as dispatch_year,
@@ -26,10 +45,12 @@ block,
 processing_center_name,
 processing_center_type,
 processing_state,
-procssing_district,
+processing_zone,
+processing_district,
 receiver_center_name,
 --receiver_center_type,
 receiver_state,
+receiver_zone,
 receiver_district,
 receiver_account_type,    
 disaster_type,
@@ -79,14 +100,25 @@ kit.item_category as kit_line_item_category,
 kit.item_sub_category as kit_line_item_sub_category,
 kit.type_of_material as kit_line_type_of_material,
 
-case when kit.line_item_quantity is null then dispatches.quantity else kit.line_item_quantity*dispatches.quantity end as item_quantity    
+COALESCE(
+    CASE 
+        WHEN kit.kit_id IS NOT NULL AND kit.line_item_quantity IS NOT NULL 
+        THEN kit.line_item_quantity * dispatches.quantity
+        ELSE dispatches.quantity
+    END, 
+    0
+) as item_quantity,
+
+
+CASE when kit.kit_id is not null then kit.item_category 
+else dispatches.item_category END as material_category,
+
+CASE when kit.kit_id is not null then kit.item_sub_category 
+else dispatches.item_sub_category END as material_sub_category
+
+
 
 FROM 
-{{ ref('int_dispatches') }} as dispatches 
-left join {{ ref('int_kit')}} as kit
-    on dispatches.kit_id = kit.kit_id
-cross join current_fy cfy
-where kit.contributed_item is null
-and kit.type_of_material !='Contributed_Track'
-and kit.item_category !='Admin Material'
-and dispatches.annual_year=cfy.current_financial_year
+filtered_dispatches as dispatches 
+LEFT JOIN filtered_kits as kit
+    ON dispatches.kit_id = kit.kit_id
